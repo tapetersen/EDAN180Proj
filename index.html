@@ -5,29 +5,28 @@
 <BODY BGCOLOR="#FFFFFF">
 <H1>Compiler Construction Project</H1>
 
-<P>By: <I>FILL IN YOUR NAMES HERE</I></P>
+<P>By: <I>Tobias Petersen, Fredik Johnsson</I></P>
 
-<P>Latest change: <I>FILL IN DATE FOR LATEST CHANGE HERE</I></P>
+<P>Latest change: <I>Finished Task1</I></P>
 
 <HR>
 
-<P><I>Fill in links below as you complete the tasks. You may modify the
-structure to match your implementation.</I>
-</P>
 
 <H2>Abstract grammar (Task 1)</H2>
 <UL>
   <LI><a href="MiniP/MiniP.ast">MiniP.ast</a></LI>
 </UL>
 <H2>Proposed assembly output</H2>
+<p>The stack design is normal intel i32 calling conventions but with static link passed in ecx and stored as first local variable giving a stack order of: retaddress, dynlink, statlink. The framepointer is set to the dynlink address.</p>
+<p>Variables are allocated in prologue and temps and args as needed and deallocated after use. Register allocation is extremely primitive and loads and stores variables before/after each ususing eax ebx for doing calculations.i</p>
 <UL>
-  <LI>printx</LI>
+    <LI><a href="examples/printx.s">printx</a></LI>
 
-  <LI>printByRecursion </LI>
+    <LI><a href="examples/printByRecursion.s">printByRecursion </a></LI>
 
-  <LI>printNested </LI>
+    <LI><a href="examples/printNested.s">printNested</a></LI>
 
-  <LI>printTwoNested</LI>
+    <LI><a href="examples/printTwoNested.s">printTwoNested</a></LI>
 </UL>
 <H2>Concrete grammar (Task 2)</H2>
 <UL>
