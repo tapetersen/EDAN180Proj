@@ -24,7 +24,7 @@ SKIP : { " " | "\t" | "\n" | "\r" }
 TOKEN: {
   < PROCEDURE: "procedure" >
 | < BEGIN: "begin" >
-| < TYPE: "integer|bool" >
+| < TYPE: "integer"|"bool" >
 | < FOR: "for" >
 | < UNTIL: "until" >
 | < DO: "do" >
@@ -36,10 +36,12 @@ TOKEN: {
 | < END: "end">
 }
 
-/* Numerals */
+/* Literals */
 TOKEN: {
-  < NUMERAL: (["0"-"9"])+ >   
+    < NUMERAL: (["0"-"9"])+ >   
+  |	< BOOL: "true"|"false" >
 }
+
 
 /* Operators */
 TOKEN: {
@@ -57,7 +59,6 @@ TOKEN: {
 | < AND: "and" >
 | < NOT: "not" >
 | < OR:  "or" >
-| < XOR: "xor" >
 }
 
 /* separators */
@@ -108,7 +109,7 @@ void stmts() : {}
 
 void stmt() : {}
 {
-  ( procedure() | iddecl() | LOOKAHEAD(3) assignment() | LOOKAHEAD(3) expr() #ExprStmt | ifstmt() | forstmt() )
+  ( procedure() | iddecl() | LOOKAHEAD(3) assignment() | LOOKAHEAD(3) boolexpr() #ExprStmt | ifstmt() | forstmt() )
 }
 
 void ifstmt() #IfStmt: {}
@@ -136,11 +137,12 @@ void assignment() #Assgn: {}
 
 void boolexpr() : {}
 {
-	expr() (
-		<AND> expr() #And(2)
-	  | <OR>  expr() #Or(2)
-	  | <XOR> expr() #Xor(2)
-	)* | <NOT> boolexpr() #Not(1)
+	boolterm() ( <OR> boolterm() #Or(2) )*
+}
+
+void boolterm() : {}
+{
+	expr() ( <AND> expr() #And(2) )*
 }
 
 void expr() : {}
@@ -173,7 +175,14 @@ void term() : {}
 
 void factor() : {}
 {
-  LOOKAHEAD(2) funccall() | iduse() | numeral() | <LPAR> boolexpr() <RPAR> | <SUB> factor() #Neg(1)
+  	LOOKAHEAD(2) funccall() 
+  | iduse() 
+  | numeral() 
+  | bool() 
+  | <LPAR> boolexpr() <RPAR> 
+  | <SUB> factor() #Neg(1) 
+  | <NOT> factor() #Not(1)
+  
 }
 
 void funccall() #FuncCall: {}
@@ -214,4 +223,12 @@ void type() #Type:
   t = <TYPE>
   { jjtThis.setTYPE(t.image);
   }
+}
+
+void bool() #Bool:
+{ Token t; }
+{
+	t = <BOOL>
+	{ jjtThis.setBOOL(Boolean.parseBoolean(t.image));
+	} 
 }

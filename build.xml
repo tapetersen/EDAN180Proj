@@ -8,6 +8,7 @@
     <property name="icode.package" value="icode" />
     <property name="parser.directory" value="src/${parser.package}" />
 	<property name="parser.program" value="test.TestCodeGen" />
+	<property name="dumpTree.program" value="test.TestBuildTree" />
     <property name="icode.directory" value="src/${icode.package}" />
 
     <taskdef classname="jastadd.JastAddTask"
@@ -74,18 +75,18 @@
                javacchome="${lib}" />
     </target>
 
-    <target name="output"
+    <target name="dump_tree"
             depends="build"
-            description="Creates a result file in the project directory.">
+            description="Creates a dump in the project directory.">
         <input message="Target name"
                addproperty="target.name"
                defaultvalue="example" />
         <java classpath="bin"
-              classname="${parser.program}"
-              output="${target.name}.res">
+              classname="${dumpTree.program}"
+              output="${target.name}.tdump">
             <arg value="data/${target.name}" />
         </java>
-        <echo>${target.name}.res created using ${parser.program}</echo>
+        <echo>${target.name}.tdump created using ${dumpTree.program}</echo>
     </target>
 
     <target name="clean" description="Delete generated files.">

@@ -28,6 +28,7 @@ Or: BinExpr;
 Not: UnExpr;
 Neg: UnExpr;
 Numeral: Expr ::= <NUMERAL>;
+Bool: Expr ::= <BOOL:boolean>;
 IdUse: Expr ::= Id;
 Id ::= <ID>;
 Type ::= <TYPE>;
