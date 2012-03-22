@@ -137,9 +137,9 @@ void assignment() #Assgn: {}
 void boolexpr() : {}
 {
 	expr() (
-		<AND> boolexpr() #And(2)
-	  | <OR>  boolexpr() #Or(2)
-	  | <XOR> boolexpr() #Xor(2)
+		<AND> expr() #And(2)
+	  | <OR>  expr() #Or(2)
+	  | <XOR> expr() #Xor(2)
 	)* | <NOT> boolexpr() #Not(1)
 }
 
@@ -173,7 +173,7 @@ void term() : {}
 
 void factor() : {}
 {
-  LOOKAHEAD(2) funccall() | iduse() | numeral() | <LPAR> expr() <RPAR> | <NOT> factor()
+  LOOKAHEAD(2) funccall() | iduse() | numeral() | <LPAR> boolexpr() <RPAR> | <SUB> factor() #Neg(1)
 }
 
 void funccall() #FuncCall: {}
