@@ -1,0 +1,217 @@
+PARSER_BEGIN(Parser)
+package parser;
+public class Parser {
+  /*
+    The first and last tokens corresponding to an AST node are saved in that AST node.
+    This requires that there is a .jadd-specification which declares the 
+    first and last variables for ASTNode.
+  */
+   public void jjtreeOpenNodeScope(Node n) {
+     ((ASTNode)n).first = getToken(1);
+   }
+   public void jjtreeCloseNodeScope(Node n) {
+     ((ASTNode)n).last = getToken(0);
+   }
+}
+PARSER_END(Parser)
+
+/* SCANNER */
+
+/* Skip whitespace */
+SKIP : { " " | "\t" | "\n" | "\r" }
+
+/* Reserved words */
+TOKEN: {
+  < PROCEDURE: "procedure" >
+| < BEGIN: "begin" >
+| < TYPE: "integer|bool" >
+| < FOR: "for" >
+| < UNTIL: "until" >
+| < DO: "do" >
+| < OD: "od" >
+| < IF: "if" >
+| < THEN: "then" >
+| < ELSE: "else" >
+| < FI: "fi" >
+| < END: "end">
+}
+
+/* Numerals */
+TOKEN: {
+  < NUMERAL: (["0"-"9"])+ >   
+}
+
+/* Operators */
+TOKEN: {
+  < ASSIGN: "=" >
+| < MUL: "*" >
+| < ADD: "+" >
+| < SUB: "-" >
+| < DIV: "/" >
+| < GTE: ">=" >
+| < LTE: "<=" >
+| < LT:  "<" >
+| < GT:  ">" >
+| < EQ:  "==" >
+| < NEQ: "!=" >
+| < AND: "and" >
+| < NOT: "not" >
+| < OR:  "or" >
+| < XOR: "xor" >
+}
+
+/* separators */
+TOKEN: {
+  < LPAR: "(" >
+| < RPAR: ")" >
+| < SEMI: ";" >
+| < COMMA: "," >
+}
+
+/* Identifiers */
+TOKEN: {
+  < ID: (["A"-"Z", "a"-"z"])+ >
+}
+
+/* Illegal */
+TOKEN: {
+  < ERROR: ~[] >
+}
+
+
+/* PARSER */
+Start start() #Start: {}
+{
+  procedure() <SEMI> <EOF>
+  { return jjtThis; }
+}
+
+void procedure() #Procedure: {}
+{
+  proc_header() proc_body()
+}
+
+void proc_header() : {}
+{
+  <PROCEDURE> id() <LPAR> ([ param() ( <COMMA> declaration() )* ]) #List(true) <RPAR>
+}
+
+void proc_body() : {}
+{
+  <BEGIN> stmts() #List(true) <END>
+}
+
+void stmts() : {}
+{
+   ( stmt() <SEMI>)*
+}
+
+void stmt() : {}
+{
+  ( procedure() | iddecl() | LOOKAHEAD(3) assignment() | LOOKAHEAD(3) expr() #ExprStmt | ifstmt() | forstmt() )
+}
+
+void ifstmt() #IfStmt: {}
+{
+  <IF> expr() <THEN> stmts() #List(true) [<ELSE> stmts()] #List(true) <FI>
+}
+
+
+void forstmt() #ForStmt: {}
+{
+  <FOR> stmt() <UNTIL> expr() <DO> stmts() #List(true) <OD>
+}
+
+void param() #Param: {} {declaration()}
+void iddecl() #IdDecl: {} {declaration()}
+void declaration() : {}
+{
+  type() id() ([ <ASSIGN> expr() ]) #Opt(true)
+}
+
+void assignment() #Assgn: {}
+{
+  iduse() <ASSIGN> expr() 
+}
+
+void boolexpr() : {}
+{
+	expr() (
+		<AND> boolexpr() #And(2)
+	  | <OR>  boolexpr() #Or(2)
+	  | <XOR> boolexpr() #Xor(2)
+	)* | <NOT> boolexpr() #Not(1)
+}
+
+void expr() : {}
+{
+  numexpr() [
+      <LT> numexpr() #Lt(2)
+    | <GT> numexpr() #Gt(2)
+    | <GTE> numexpr() #Gte(2)
+    | <LTE> numexpr() #Lte(2)
+    | <EQ> numexpr() #Eq(2)
+    | <NEQ> numexpr() #Neq(2)
+  ]
+}
+
+void numexpr() : {}
+{
+  term() ( 
+      <ADD> term() #Add(2) 
+    | <SUB> term() #Sub(2)
+  )*
+}
+
+void term() : {}
+{
+  factor() ( 
+      <MUL> factor() #Mul(2) 
+    | <DIV> factor() #Div(2) 
+  )*
+}
+
+void factor() : {}
+{
+  LOOKAHEAD(2) funccall() | iduse() | numeral() | <LPAR> expr() <RPAR> | <NOT> factor()
+}
+
+void funccall() #FuncCall: {}
+{
+  id() <LPAR>  ([ arglist() ]) #List(true) <RPAR>
+}
+
+void arglist() : {}
+{
+  expr() ( <COMMA> expr() )*
+}
+
+
+void numeral() #Numeral: 
+{ Token t; }
+{
+  t = <NUMERAL>
+  {jjtThis.setNUMERAL(t.image);
+  }
+}
+
+void iduse() #IdUse : {}
+{
+	id()
+}
+
+void id() #Id:
+{ Token t; } 
+{
+  t = <ID>
+  { jjtThis.setID(t.image);
+  }
+}
+
+void type() #Type:
+{ Token t; } 
+{
+  t = <TYPE>
+  { jjtThis.setTYPE(t.image);
+  }
+}
