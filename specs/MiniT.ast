@@ -27,7 +27,7 @@ And: BinExpr;
 Or: BinExpr;
 Not: UnExpr;
 Neg: UnExpr;
-Numeral: Expr ::= <NUMERAL:int>;
+Numeral: Expr ::= <NUMERAL>;
 IdUse: Expr ::= Id;
 Id ::= <ID>;
 Type ::= <TYPE>;
