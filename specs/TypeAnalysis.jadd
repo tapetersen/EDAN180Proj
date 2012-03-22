@@ -3,12 +3,12 @@ import semantic.*;
 aspect TypeAnalysis {
 
 	public void Start.typeAnalysis(Semantic s) {
-		super(s);
+		super.typeAnalysis(s);
 	}
 	
 	void ASTNode.typeAnalysis(Semantic s) {
 		for (int k=0; k<getNumChild(); k++) {
-			getChild(k).typeAnalysis(table, s);
+			getChild(k).typeAnalysis(s);
 		}
 	}
 	
@@ -21,7 +21,7 @@ aspect TypeAnalysis {
 	public void UnExpr.typeAnalysis(Semantic s) {
 		if(getOperand().type() != argtype())
 			s.addError( new TypeError("expected type: "+argtype()+" found: "+getOperand().type()));
-		super typeAnalysis(s);
+		super.typeAnalysis(s);
 	}
 	
 	public void BinExpr.typeAnalysis(Semantic s) {
@@ -29,15 +29,19 @@ aspect TypeAnalysis {
 			s.addError( new TypeError("expected leftoperand type: "+argtype()+" found: "+getLeft().type()));
 		if(getRight().type() != argtype())
 			s.addError( new TypeError("expected leftoperand type: "+argtype()+" found: "+getRight().type()));
-		super typeAnalysis(s);
+		super.typeAnalysis(s);
 	}
 	
 	public String IdUse.type() {
 		return decl().type();
 	}
 	
-	public static Expr.INTEGER = new String("integer").intern();
-	public static Expr.BOOL = new String("bool").intern();
+	public abstract String Expr.type();
+	public abstract String BinExpr.argtype();
+	public abstract String UnExpr.argtype();
+	
+	public static String Expr.INTEGER = new String("integer").intern();
+	public static String Expr.BOOL = new String("bool").intern();
 	public String Add.type() { return INTEGER; }
 	public String Sub.type() { return INTEGER; }
 	public String Div.type() { return INTEGER; }
