@@ -1,0 +1,41 @@
+Code ::= Instruction*;
+
+abstract Instruction;
+Move: Instruction ::= Operand Address;
+Call: Instruction ::= <Label: String> <Levels: int>;
+Enter: Instruction ::= <Vars: int> <Temps: int>;
+Return: Instruction;
+Alloc: Instruction ::= <Size: int>;
+Dealloc: Instruction ::= <Size: int>;
+LabelDecl: Instruction ::= <Label: String>;
+
+abstract Operand;
+IntConst: Operand ::= <Value: String>;
+
+abstract Address: Operand;
+Temp: Address ::= <Number: int>;
+Argument: Address ::= <Number: int>;
+Variable: Address ::= <Levels: int> <Number: int>;
+Parameter: Variable;
+Result: Address;
+Returned: Address;
+
+abstract BinOpr: Instruction ::=
+       Operand1:Operand Operand2:Operand Address;
+abstract IntOpr: BinOpr;
+IntAdd: IntOpr;
+IntSub: IntOpr;
+IntMul: IntOpr;
+IntDiv: IntOpr;
+abstract BoolOpr: BinOpr;
+IntEq: BoolOpr;
+IntNe: BoolOpr;
+IntLt: BoolOpr;
+IntLe: BoolOpr;
+IntGt: BoolOpr;
+IntGe: BoolOpr;
+
+Jmp: Instruction ::= <Label: String>;
+abstract JmpCond: Jmp ::= Operand <Label: String>;
+JmpF: JmpCond;
+JmpT: JmpCond;

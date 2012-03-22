@@ -1,0 +1,115 @@
+import util.*;
+import java.util.*;
+aspect icodeToString {
+    private final static int[] Code.tabs = new int[]{8, 16, 32, 48, 64};
+    public String Code.toString() {
+        StringBuilder builder = new StringBuilder();
+        TabbedBuffer lineBuffer = new TabbedBuffer(tabs);
+        for (int i=0; i<getNumInstruction(); i++) {
+            lineBuffer.clear();
+            builder.append(getInstruction(i).toString(lineBuffer));
+            builder.append('\n');
+        }
+        return builder.toString();
+    }
+
+    String Instruction.comment = "";
+    static final int Instruction.commentTab = 5;
+    public void Instruction.setComment(String comment) {
+        this.comment = comment;
+    }
+    abstract String BinOpr.opString();
+    abstract void Instruction.appendBody(TabbedBuffer buffer);
+    public String Instruction.toString(TabbedBuffer buffer) {
+        buffer.tabTo(1);
+        appendBody(buffer);
+        buffer.tabTo(commentTab);
+        if (!comment.equals("")) {
+          buffer.append("// ");
+          buffer.append(comment);
+        }
+        return buffer.toString();
+    }
+    public void LabelDecl.appendBody(TabbedBuffer buffer) {
+        buffer.clear();
+        buffer.append(getLabel()+":");
+    }
+    public void Move.appendBody(TabbedBuffer buffer) {
+        buffer.append("MOV");
+        buffer.append(getOperand());
+        buffer.append(getAddress());
+    }
+    public void Call.appendBody(TabbedBuffer buffer) {
+        buffer.append("CALL");
+        buffer.append(getLabel());
+        buffer.append("levels(" + getLevels() + ")");
+    }
+    public void Alloc.appendBody(TabbedBuffer buffer) {
+        buffer.append("ALLOC");
+        buffer.append("size(" + getSize() + ")");
+    }
+    public void Dealloc.appendBody(TabbedBuffer buffer) {
+        buffer.append("DEALLOC");
+        buffer.append("size(" + getSize() + ")");
+    }
+    public void Enter.appendBody(TabbedBuffer buffer) {
+        buffer.append("ENTER");
+        buffer.append("vars(" + getVars() + ")");
+        buffer.append("temps(" + getTemps() + ")");
+    }
+    public void Return.appendBody(TabbedBuffer buffer) {
+        buffer.append("RETURN");
+    }
+    public void BinOpr.appendBody(TabbedBuffer buffer) {
+        buffer.append(opString());
+        buffer.append(getOperand1());
+        buffer.append(getOperand2());
+        buffer.append(getAddress());
+    }
+    public void Jmp.appendBody(TabbedBuffer buffer) {
+        buffer.append("JMP");
+        buffer.append(getLabel());
+    }
+    abstract String JmpCond.opString();
+
+    public void JmpCond.appendBody(TabbedBuffer buffer) {
+        buffer.append(opString());
+        buffer.append(getOperand());
+        buffer.append(getLabel());
+    }
+
+    String IntAdd.opString() {return "INTADD";}
+    String IntSub.opString() {return "INTSUB";}
+    String IntMul.opString() {return "INTMUL";}
+    String IntDiv.opString() {return "INTDIV";}
+    String IntEq.opString() {return "INTEQ";}
+    String IntNe.opString() {return "INTNE";}
+    String IntLt.opString() {return "INTLT";}
+    String IntLe.opString() {return "INTLE";}
+    String IntGt.opString() {return "INTGT";}
+    String IntGe.opString() {return "INTGE";}
+    String JmpF.opString() {return "JMPF";}
+    String JmpT.opString() {return "JMPT";}
+
+    public String Variable.toString() {
+        return "var("+getLevels()+","+getNumber()+")";
+    }
+    public String Parameter.toString() {
+        return "par("+getLevels()+","+getNumber()+")";
+    }
+    public String Argument.toString() {
+        return "arg("+getNumber()+")";
+    }
+    public String Temp.toString() {
+        return "#"+getNumber();
+    }
+    public String Result.toString() {
+        return "result";
+    }
+    public String Returned.toString() {
+        return "returned";
+    }
+    public String IntConst.toString() {
+        return ""+getValue();
+    }
+}
