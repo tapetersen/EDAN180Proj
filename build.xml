@@ -9,6 +9,7 @@
     <property name="parser.directory" value="src/${parser.package}" />
 	<property name="parser.program" value="test.TestCodeGen" />
 	<property name="dumpTree.program" value="test.TestBuildTree" />
+	<property name="semantic.program" value="test.TestSemantic" />
     <property name="icode.directory" value="src/${icode.package}" />
 
     <taskdef classname="jastadd.JastAddTask"
@@ -87,6 +88,20 @@
             <arg value="data/${target.name}" />
         </java>
         <echo>${target.name}.tdump created using ${dumpTree.program}</echo>
+    </target>
+	
+    <target name="analyse"
+            depends="build"
+            description="Runs semantic anlysis.">
+        <input message="Target name"
+               addproperty="target.name"
+               defaultvalue="example" />
+        <java classpath="bin"
+              classname="${semantic.program}"
+              output="${target.name}.sem">
+            <arg value="data/${target.name}" />
+        </java>
+        <echo>${target.name}.sem created using ${Semantic.program}</echo>
     </target>
 
     <target name="clean" description="Delete generated files.">

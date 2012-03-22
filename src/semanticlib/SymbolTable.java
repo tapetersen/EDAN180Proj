@@ -1,6 +1,8 @@
 package semanticlib;
 import java.util.HashMap;
 
+import semantic.NameError;
+
 /**
  * Maintains a stack of dictionaries for block-structured symbol handling.
  */
@@ -11,12 +13,17 @@ public class SymbolTable<K, V> {
     /**
      * Adds the symbol (and its associated meaning) to the top dictionary. The
      * symbol will shadow existing symbols of the same name.
+     * @throws NameError 
      */
-    public void add(K symbol, V meaning) {
+    public void add(K symbol, V meaning) throws NameError {
         if (top == null)
             throw new RuntimeException(
                     "SymbolTable.add was called without any prior call to enterBlock");
+        if(top.containsKey(symbol))
+        	throw new NameError("Name already defined at this level");
+        		
         top.put(symbol, meaning);
+        
     }
 
     /**

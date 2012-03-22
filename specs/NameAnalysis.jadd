@@ -1,0 +1,43 @@
+import semanticlib.SymbolTable;
+import semantic.*;
+
+aspect NameAnalysis {
+	
+	public void Start.nameAnalysis(Semantic s) {
+		SymbolTable<String, IdDecl> table = new SymbolTable<String, IdDecl>();
+		nameAnalysis(table, s);
+	}
+	
+	void ASTNode.nameAnalysis(SymbolTable<String, IdDecl> table, Semantic s) {
+		for (int k=0; k<getNumChild(); k++) {
+			getChild(k).nameAnalysis(table, s);
+		}
+	}
+	
+	void IdDecl.nameAnalysis(SymbolTable<String, IdDecl> table, Semantic s) {
+		super.nameAnalysis(table, s);
+		try {
+			table.add(getId().getID(), this);
+		} catch(NameError e) {
+			s.addError(e);
+		}
+	}
+	
+	private IdDecl IdUse.declNode = null;
+	public IdDecl IdUse.decl() {
+		return declNode;
+	}
+	
+	void IdUse.nameAnalysis(SymbolTable<String, IdDecl> table, Semantic s) {
+		declNode = table.lookup(getId().getID());
+		if(declNode == null)
+			s.addError(new NameError("Id: "+getId().getID()+" not declared."));
+	}
+	
+	void Procedure.nameAnalysis(SymbolTable<String, IdDecl> table, Semantic s) {
+		s.addProcedure(this);
+		table.enterBlock();
+		super.nameAnalysis(table, s);
+		table.exitBlock();
+	}
+}
