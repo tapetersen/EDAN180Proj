@@ -10,6 +10,7 @@ IfStmt: Stmt ::= Expr IfPart:Stmt* ElsePart:Stmt*;
 ForStmt: Stmt ::= Init:Stmt Check:Expr Body:Stmt*;
 
 abstract Expr;
+abstract Literal: Expr;
 abstract UnExpr: Expr ::= Operand:Expr;
 abstract BinExpr: Expr ::= Left:Expr Right:Expr;
 FuncCall: Expr ::= Id Arg:Expr*;
@@ -27,8 +28,8 @@ And: BinExpr;
 Or: BinExpr;
 Not: UnExpr;
 Neg: UnExpr;
-Numeral: Expr ::= <NUMERAL>;
-Bool: Expr ::= <BOOL:boolean>;
+Numeral: Literal ::= <NUMERAL>;
+Bool: Literal ::= <BOOL:boolean>;
 IdUse: Expr ::= Id;
 Id ::= <ID>;
 Type ::= <TYPE>;

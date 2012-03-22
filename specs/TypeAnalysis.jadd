@@ -39,9 +39,19 @@ aspect TypeAnalysis {
 	public abstract String Expr.type();
 	public abstract String BinExpr.argtype();
 	public abstract String UnExpr.argtype();
-	
-	public static String Expr.INTEGER = new String("integer").intern();
-	public static String Expr.BOOL = new String("bool").intern();
+
+	private String IdDecl.type = null;	
+	public String IdDecl.type() {
+		if(type == null)
+			type = getType().getTYPE(); 
+		return type;
+	}
+	public static String ASTNode.INTEGER = new String("integer").intern();
+	public static String ASTNode.BOOL = new String("bool").intern();
+	public String FuncCall.type() { return decl().type(); }
+	public String Procedure.type() { return getType().getTYPE(); }
+	public String Numeral.type() { return INTEGER; }
+	public String Bool.type() { return BOOL; }
 	public String Add.type() { return INTEGER; }
 	public String Sub.type() { return INTEGER; }
 	public String Div.type() { return INTEGER; }

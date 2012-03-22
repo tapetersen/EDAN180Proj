@@ -12,7 +12,7 @@ aspect NameAnalysis {
 		for (int k=0; k<getNumChild(); k++) {
 			getChild(k).nameAnalysis(table, s);
 		}
-	}
+	}	
 	
 	void IdDecl.nameAnalysis(SymbolTable<String, IdDecl> table, Semantic s) {
 		super.nameAnalysis(table, s);
@@ -23,8 +23,18 @@ aspect NameAnalysis {
 		}
 	}
 	
+	private String IdDecl.id = null;
+	public String IdDecl.id() {
+		if(id == null)
+			id = getId().getID();
+		return id;
+	}
 	private IdDecl IdUse.declNode = null;
 	public IdDecl IdUse.decl() {
+		return declNode;
+	}
+	private Procedure FuncCall.declNode = null;
+	public Procedure FuncCall.decl() {
 		return declNode;
 	}
 	
@@ -35,9 +45,13 @@ aspect NameAnalysis {
 	}
 	
 	void Procedure.nameAnalysis(SymbolTable<String, IdDecl> table, Semantic s) {
+	
+		// Add procedure so we can find them on second pass
 		s.addProcedure(this);
 		table.enterBlock();
 		super.nameAnalysis(table, s);
 		table.exitBlock();
 	}
+	
+	
 }
