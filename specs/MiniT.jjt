@@ -221,7 +221,7 @@ void type() #Type:
 { Token t; } 
 {
   t = <TYPE>
-  { jjtThis.setTYPE(t.image);
+  { jjtThis.setTYPE(t.image.intern());
   }
 }
 
@@ -229,6 +229,6 @@ void bool() #Bool:
 { Token t; }
 {
 	t = <BOOL>
-	{ jjtThis.setBOOL(Boolean.parseBoolean(t.image));
+	{ jjtThis.setBOOL(Boolean.parseBoolean(t.image.intern()));
 	} 
 }

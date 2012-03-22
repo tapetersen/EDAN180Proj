@@ -1,0 +1,71 @@
+import semantic.*;
+
+aspect TypeAnalysis {
+
+	public void Start.typeAnalysis(Semantic s) {
+		super(s);
+	}
+	
+	void ASTNode.typeAnalysis(Semantic s) {
+		for (int k=0; k<getNumChild(); k++) {
+			getChild(k).typeAnalysis(table, s);
+		}
+	}
+	
+	void IdDecl.typeAnalysis(Semantic s) {
+		if(hasExpr())
+			if(getExpr().type() != type())
+				s.addError( new TypeError("var: "+this.id()+" has type: "+type()+" found: "+getExpr().type()));
+	}
+	
+	public void UnExpr.typeAnalysis(Semantic s) {
+		if(getOperand().type() != argtype())
+			s.addError( new TypeError("expected type: "+argtype()+" found: "+getOperand().type()));
+		super typeAnalysis(s);
+	}
+	
+	public void BinExpr.typeAnalysis(Semantic s) {
+		if(getLeft().type() != argtype())
+			s.addError( new TypeError("expected leftoperand type: "+argtype()+" found: "+getLeft().type()));
+		if(getRight().type() != argtype())
+			s.addError( new TypeError("expected leftoperand type: "+argtype()+" found: "+getRight().type()));
+		super typeAnalysis(s);
+	}
+	
+	public String IdUse.type() {
+		return decl().type();
+	}
+	
+	public static Expr.INTEGER = new String("integer").intern();
+	public static Expr.BOOL = new String("bool").intern();
+	public String Add.type() { return INTEGER; }
+	public String Sub.type() { return INTEGER; }
+	public String Div.type() { return INTEGER; }
+	public String Mul.type() { return INTEGER; }
+	public String Neg.type() { return INTEGER; }
+	public String And.type() { return BOOL; }
+	public String Or.type() { return BOOL; }
+	public String Not.type() { return BOOL; }
+	public String Lt.type() { return BOOL; }
+	public String Lte.type() { return BOOL; }
+	public String Gt.type() { return BOOL; }
+	public String Gte.type() { return BOOL; }
+	public String Eq.type() { return BOOL; }
+	public String Neq.type() { return BOOL; }
+	
+	public String Add.argtype() { return INTEGER; }
+	public String Sub.argtype() { return INTEGER; }
+	public String Div.argtype() { return INTEGER; }
+	public String Mul.argtype() { return INTEGER; }
+	public String Neg.argtype() { return INTEGER; }
+	public String And.argtype() { return BOOL; }
+	public String Or.argtype() { return BOOL; }
+	public String Not.argtype() { return BOOL; }
+	public String Lt.argtype() { return BOOL; }
+	public String Lte.argtype() { return BOOL; }
+	public String Gt.argtype() { return BOOL; }
+	public String Gte.argtype() { return BOOL; }
+	public String Eq.argtype() { return BOOL; }
+	public String Neq.argtype() { return BOOL; }
+	
+}
