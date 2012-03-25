@@ -1,0 +1,82 @@
+import icode.*;
+import util.*;
+import java.util.ArrayList;
+aspect CodeGenerator {
+	public void Start.genCode(Code code, Semantic s) {
+		nameAnalysis(s);
+		genCode(code, new TempFactory(), 0, null);
+	}
+	public void Start.genCode(Code code, TempFactory tempFactory, int blockLevel, Procedure proc) {
+		getProcedure().genCode(code, tempFactory, -1, null);
+	}
+	
+	public int Procedure.addVar(IdDecl decl) {
+		return numVars++;
+	}
+		
+	private int Procedure.numVars;
+	private int Procedure.blockLevel;
+	public void Procedure.genCode(Code code, TempFactory tempFactory, int blockLevel, Procedure proc) {
+		blockLevel = proc == null ? 0 : proc.blockLevel+1;
+		
+		numVars = 0;
+		
+		code.addInstruction(new LabelDecl(getId().getID()));
+		
+		// Add Enter stmt and keep reference for backpatching sizes
+		Enter enter;
+		enter = new Enter(0, 0);
+		code.addInstruction(enter);
+		
+		for(Stmt t: getStmts()) {
+			t.genCode(code, tempFactory, blockLevel, this);
+		}
+			
+		enter.setTemps(tempFactory.getNumberOfTemps());
+		enter.setVars(numVars);
+		code.addInstruction(new Return());
+	}
+	
+	public void Stmt.genCode(Code code, TempFactory tempFactory, int blockLevel, Procedure proc) {
+		return;
+	}
+	
+	private Variable IdDecl.variable = null;
+	public Variable IdDecl.getVariable() { return variable; }
+	public void IdDecl.genCode(Code code, TempFactory tempFactory, int blockLevel, Procedure proc) {
+		int offset = proc.addVar(this);
+		variable = new Variable(blockLevel, offset);
+		if(hasExpr())
+			code.addInstruction(new Move(getExpr().genExpr(code, tempFactory, blockLevel), variable));
+	}
+	
+	public void Assgn.genCode(Code code, TempFactory tempFactory, int blockLevel, Procedure proc) {
+		code.addInstruction(new Move(
+			getExpr().genExpr(code, tempFactory, blockLevel),
+			getIdUse().decl().getVariable()
+		));
+	}
+
+	public Operand IdUse.genExpr(Code code, TempFactory tempFactory, int blockLevel) {
+		return decl().getVariable();
+	}
+	
+	public Operand Expr.genExpr(Code code, TempFactory tempFactory, int blockLevel) {
+		return null;
+	}
+	
+	public Operand Numeral.genExpr(Code code, TempFactory tempFactory, int blockLevel) {
+		return new IntConst(getNUMERAL());
+	}
+	
+	public Operand Add.genExpr(Code code, TempFactory tempFactory, int blockLevel) {
+		Address res = tempFactory.create();
+		code.addInstruction(new IntAdd(
+			getLeft().genExpr(code, tempFactory, blockLevel),
+		 	getRight().genExpr(code, tempFactory, blockLevel),
+		 	res
+		 ));
+		 	
+		return res;
+	}
+}

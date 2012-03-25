@@ -29,15 +29,15 @@ aspect NameAnalysis {
 			id = getId().getID();
 		return id;
 	}
-	private IdDecl IdUse.declNode = null;
-	public IdDecl IdUse.decl() {
-		return declNode;
-	}
 	private Procedure FuncCall.declNode = null;
 	public Procedure FuncCall.decl() {
 		return declNode;
 	}
 	
+	private IdDecl IdUse.declNode = null;
+	public IdDecl IdUse.decl() {
+		return declNode;
+	}
 	void IdUse.nameAnalysis(SymbolTable<String, IdDecl> table, Semantic s) {
 		declNode = table.lookup(getId().getID());
 		if(declNode == null)
