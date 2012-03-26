@@ -24,6 +24,8 @@ public class Semantic {
 	}
 	
 	public Procedure currentProcedure() {
+		if(currentProcedure.empty())
+			return null;
 		return currentProcedure.peek();
 	}
 	

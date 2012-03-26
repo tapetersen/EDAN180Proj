@@ -21,7 +21,7 @@ aspect CodeGenerator {
 		
 		numVars = 0;
 		
-		code.addInstruction(new LabelDecl(getId().getID()));
+		code.addInstruction(new LabelDecl(label()));
 		
 		// Add Enter stmt and keep reference for backpatching sizes
 		Enter enter;
@@ -144,6 +144,7 @@ aspect CodeGenerator {
 		 	
 		return res;
 	}
+	
 	public Operand And.genExpr(Code code, TempFactory tempFactory, int blockLevel) {
 		Address res = tempFactory.create();
 		code.addInstruction(new BoolAnd(
@@ -154,9 +155,11 @@ aspect CodeGenerator {
 		 	
 		return res;
 	}
+	
 	public Operand Bool.genExpr(Code code, TempFactory tempFactory, int blockLevel) {
 		return null;
 	}
+	
 	public Operand Eq.genExpr(Code code, TempFactory tempFactory, int blockLevel) {
 		Address res = tempFactory.create();
 		code.addInstruction(new IntEq(
@@ -167,9 +170,14 @@ aspect CodeGenerator {
 		 	
 		return res;
 	}
+	
 	public Operand FuncCall.genExpr(Code code, TempFactory tempFactory, int blockLevel) {
-		return null;
+		Address res = tempFactory.create();
+		code.addInstruction(new Call(decl().label(), blockLevel));
+		code.addInstruction(new Move(new Result(), res));
+		return res;
 	}
+	
 	public Operand Gt.genExpr(Code code, TempFactory tempFactory, int blockLevel) {
 		Address res = tempFactory.create();
 		code.addInstruction(new IntGt(
