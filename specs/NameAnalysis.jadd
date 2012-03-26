@@ -6,14 +6,15 @@ aspect NameAnalysis {
 	public void Start.nameAnalysis(Semantic s) {
 		SymbolTable<String, IdDecl> table = new SymbolTable<String, IdDecl>();
 		nameAnalysis(table, s);
-		SymbolTable<String, Procedure> table = new SymbolTable<String, Procedure>();
+		SymbolTable<String, Procedure> procTable = new SymbolTable<String, Procedure>();
 		
 		// gather toplevel procedures
-		gatherProcedures(table, s);
-		procAnalysis(table, s);
+		gatherProcedures(procTable, s);
+		procAnalysis(procTable, s);
 	}
 	
 	void ASTNode.nameAnalysis(SymbolTable<String, IdDecl> table, Semantic s) {
+		table.enterBlock();
 		for (int k=0; k<getNumChild(); k++) {
 			getChild(k).nameAnalysis(table, s);
 		}
@@ -104,7 +105,12 @@ aspect NameAnalysis {
 	
 	void Procedure.gatherProcedures(SymbolTable<String, Procedure> table, Semantic s) {
 		// just add the procedure for binding, don't recurse
-		table.add(id(), this);
+		table.enterBlock();
+		try {
+			table.add(id(), this);
+		} catch (NameError e) {
+			s.addError(e);
+		}
 	}
 	
 	

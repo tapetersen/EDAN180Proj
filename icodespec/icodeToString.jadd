@@ -60,6 +60,13 @@ aspect icodeToString {
     public void Return.appendBody(TabbedBuffer buffer) {
         buffer.append("RETURN");
     }
+    public void UnOpr.appendBody(TabbedBuffer buffer) {
+        buffer.append(opString());
+        buffer.append(getOperand());
+        buffer.append(getAddress());
+    }
+	abstract String UnOpr.opString();
+	
     public void BinOpr.appendBody(TabbedBuffer buffer) {
         buffer.append(opString());
         buffer.append(getOperand1());
@@ -70,6 +77,7 @@ aspect icodeToString {
         buffer.append("JMP");
         buffer.append(getLabel());
     }
+ 
     abstract String JmpCond.opString();
 
     public void JmpCond.appendBody(TabbedBuffer buffer) {
