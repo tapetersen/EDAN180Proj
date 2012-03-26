@@ -20,4 +20,12 @@ begin
 	q = f or t;
 	q = q and q;
 	q = not q;
+	if x < y then
+		z = x + 1;
+	fi;
+	if x > y then
+		x = y + 2;
+	else
+		x = y - 2;
+	fi;
 end;
