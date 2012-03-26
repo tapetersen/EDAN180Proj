@@ -1,13 +1,30 @@
 package semantic;
+import parser.Procedure;
 import semanticlib.SymbolTable;
 
 import java.util.ArrayList;
+import java.util.Stack;
 
 public class Semantic {
 	
 	private ArrayList<Exception> errors;
+	private Stack<Procedure> currentProcedure;
+	
 	public Semantic() {
 		errors = new ArrayList<Exception>();
+		currentProcedure = new Stack<Procedure>();
+	}
+	
+	public void enterProcedure(Procedure p) {
+		currentProcedure.push(p);
+	}
+	
+	public void exitProcedure(Procedure p) {
+		currentProcedure.pop();
+	}
+	
+	public Procedure currentProcedure() {
+		return currentProcedure.peek();
 	}
 	
 	public void addError(Exception e) {

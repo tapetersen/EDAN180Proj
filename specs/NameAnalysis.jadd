@@ -19,8 +19,6 @@ aspect NameAnalysis {
 			getChild(k).nameAnalysis(table, s);
 		}
 	}
-		
-
 	
 	void IdDecl.nameAnalysis(SymbolTable<String, IdDecl> table, Semantic s) {
 		super.nameAnalysis(table, s);
@@ -54,6 +52,11 @@ aspect NameAnalysis {
 		return declNode;
 	}
 	
+	private Procedure Ret.proc = null;
+	public Procedure Ret.proc() {
+		return proc;
+	}
+	
 	void IdUse.nameAnalysis(SymbolTable<String, IdDecl> table, Semantic s) {
 		declNode = table.lookup(getId().getID());
 		if(declNode == null)
@@ -75,6 +78,7 @@ aspect NameAnalysis {
 	
 	void Procedure.procAnalysis(SymbolTable<String, Procedure> table, Semantic s) {
 	
+		s.enterProcedure(this);
 		// procedure should already be in table
 		table.enterBlock();
 		
@@ -89,6 +93,7 @@ aspect NameAnalysis {
 		}
 		
 		table.exitBlock();
+		s.exitProcedure();
 	}
 	
 	void FuncCall.procAnalysis(SymbolTable<String, Procedure> table, Semantic s) {

@@ -32,6 +32,22 @@ aspect TypeAnalysis {
 		super.typeAnalysis(s);
 	}
 	
+	public void FuncCall.typeAnalysis(Semantic s) {
+		if(getNumArg() != decl().getNumParam()) {
+			s.addError( new TypeError(""+decl()+" called with wrong number of params."));
+			return;
+		}
+		for(int i=0; i<getNumArg(); i++) {
+			if(getArg(i).type() != decl().getParam(i).type())
+				s.addError( new TypeError("Param " + i + " type mismatch."));
+		}
+	}
+	
+	public void Ret.typeAnalysis(Semantic s) {
+		if(!hasExpr() && proc().hasType())
+			s.addError( new TypeError("return with expression from function without type"));
+	}
+	
 	public String IdUse.type() {
 		return decl().type();
 	}
