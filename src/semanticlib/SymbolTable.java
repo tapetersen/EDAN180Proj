@@ -1,4 +1,5 @@
 package semanticlib;
+import java.util.Collection;
 import java.util.HashMap;
 
 import semantic.NameError;
@@ -73,6 +74,11 @@ public class SymbolTable<K, V> {
     public int blockLevel() {
         return n;
     }
+    
+    public Collection<V> getLocalSymbols() {
+    	return top.values();
+    }
+    
     private static class StackedMap<K, V> extends HashMap<K, V> {
         private StackedMap<K, V> next;
 

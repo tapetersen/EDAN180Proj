@@ -1,8 +1,7 @@
 package semantic;
+import semanticlib.SymbolTable;
 
 import java.util.ArrayList;
-
-import parser.Procedure;
 
 public class Semantic {
 	
@@ -16,9 +15,6 @@ public class Semantic {
 	}
 	
 	public int numErrors() { return errors.size(); }
-	public void addProcedure(Procedure p) {
-	
-	}
 	public void printAnalysis() {
 		if(errors.isEmpty())
 			System.out.println("No errors!");
