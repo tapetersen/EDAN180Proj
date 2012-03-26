@@ -242,9 +242,16 @@ aspect CodeGenerator {
 		 	
 		return res;
 	}
+	
 	public void Ret.genCode(Code code, TempFactory tempFactory, int blockLevel,	Procedure proc) {
-		//TODO
+		if(hasExpr())
+			code.addInstruction(new Move(
+				getExpr().genExpr(code, tempFactory, blockLevel),
+				new Result()
+		));
+		code.addInstruction(new Return());
 	}
+	
 	public Stmt ForStmt.getStmt(){
 		return (Stmt)getChild(0);
 	}
