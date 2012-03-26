@@ -20,6 +20,8 @@ Parameter: Variable;
 Result: Address;
 Returned: Address;
 
+abstract UnOpr: Instruction ::=
+       Operand:Operand Address;
 abstract BinOpr: Instruction ::=
        Operand1:Operand Operand2:Operand Address;
 abstract IntOpr: BinOpr;
@@ -27,6 +29,7 @@ IntAdd: IntOpr;
 IntSub: IntOpr;
 IntMul: IntOpr;
 IntDiv: IntOpr;
+IntNeg: UnOpr;
 abstract BoolOpr: BinOpr;
 IntEq: BoolOpr;
 IntNe: BoolOpr;
@@ -36,7 +39,7 @@ IntGt: BoolOpr;
 IntGe: BoolOpr;
 BoolAnd: BoolOpr;
 BoolOr: BoolOpr;
-BoolNot: BoolOpr;
+BoolNot: UnOpr;
 
 Jmp: Instruction ::= <Label: String>;
 abstract JmpCond: Jmp ::= Operand <Label: String>;

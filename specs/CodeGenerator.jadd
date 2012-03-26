@@ -190,8 +190,7 @@ aspect CodeGenerator {
 	public Operand Not.genExpr(Code code, TempFactory tempFactory, int blockLevel) {
 		Address res = tempFactory.create();
 		code.addInstruction(new BoolNot(
-			getLeft().genExpr(code, tempFactory, blockLevel),
-		 	getRight().genExpr(code, tempFactory, blockLevel),
+			getOperand().genExpr(code, tempFactory, blockLevel),
 		 	res
 		 ));
 		 	
