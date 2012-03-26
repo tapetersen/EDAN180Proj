@@ -242,6 +242,9 @@ aspect CodeGenerator {
 		 	
 		return res;
 	}
+	public void Ret.genCode(Code code, TempFactory tempFactory, int blockLevel,	Procedure proc) {
+		//TODO
+	}
 	public Stmt ForStmt.getStmt(){
 		return (Stmt)getChild(0);
 	}
