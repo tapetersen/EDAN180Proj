@@ -3,4 +3,8 @@ begin
 	integer x = 0;
 	integer y = x;
 	integer z = y;
+	x = y + z;
+	y = x - z;
+	z = x * y;
+	y = x / z;
 end;

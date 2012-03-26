@@ -79,4 +79,35 @@ aspect CodeGenerator {
 		 	
 		return res;
 	}
+	
+	public Operand Sub.genExpr(Code code, TempFactory tempFactory, int blockLevel) {
+		Address res = tempFactory.create();
+		code.addInstruction(new IntSub(
+			getLeft().genExpr(code, tempFactory, blockLevel),
+		 	getRight().genExpr(code, tempFactory, blockLevel),
+		 	res
+		 ));
+		 	
+		return res;
+	}
+	public Operand Mul.genExpr(Code code, TempFactory tempFactory, int blockLevel) {
+		Address res = tempFactory.create();
+		code.addInstruction(new IntMul(
+			getLeft().genExpr(code, tempFactory, blockLevel),
+		 	getRight().genExpr(code, tempFactory, blockLevel),
+		 	res
+		 ));
+		 	
+		return res;
+	}
+	public Operand Div.genExpr(Code code, TempFactory tempFactory, int blockLevel) {
+		Address res = tempFactory.create();
+		code.addInstruction(new IntDiv(
+			getLeft().genExpr(code, tempFactory, blockLevel),
+		 	getRight().genExpr(code, tempFactory, blockLevel),
+		 	res
+		 ));
+		 	
+		return res;
+	}
 }

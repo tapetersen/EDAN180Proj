@@ -109,7 +109,7 @@
 	            description="Creates iCode.">
 	        <input message="Target name"
 	               addproperty="target.name"
-	               defaultvalue="example" />
+	               defaultvalue="codeexample" />
 	        <java classpath="bin"
 	              classname="${icode.program}"
 	              output="${target.name}.code">
