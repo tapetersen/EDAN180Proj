@@ -33,7 +33,8 @@ TOKEN: {
 | < THEN: "then" >
 | < ELSE: "else" >
 | < FI: "fi" >
-| < END: "end">
+| < END: "end" >
+| < RETURN: "return" >
 }
 
 /* Literals */
@@ -41,7 +42,6 @@ TOKEN: {
     < NUMERAL: (["0"-"9"])+ >   
   |	< BOOL: "true"|"false" >
 }
-
 
 /* Operators */
 TOKEN: {
@@ -94,7 +94,7 @@ void procedure() #Procedure: {}
 
 void proc_header() : {}
 {
-  <PROCEDURE> id() <LPAR> ([ param() ( <COMMA> declaration() )* ]) #List(true) <RPAR>
+  <PROCEDURE> [ type() ] #Opt(true) id() <LPAR> ([ param() ( <COMMA> declaration() )* ]) #List(true) <RPAR>
 }
 
 void proc_body() : {}
@@ -109,7 +109,7 @@ void stmts() : {}
 
 void stmt() : {}
 {
-  ( procedure() | iddecl() | LOOKAHEAD(3) assignment() | LOOKAHEAD(3) expr() #ExprStmt | ifstmt() | forstmt() )
+  ( procedure() | iddecl() | LOOKAHEAD(3) assignment() | LOOKAHEAD(3) expr() #ExprStmt | ifstmt() | forstmt() | retstmt() )
 }
 
 void ifstmt() #IfStmt: {}
@@ -120,6 +120,11 @@ void ifstmt() #IfStmt: {}
 void forstmt() #ForStmt: {}
 {
   <FOR> stmt() <UNTIL> expr() <DO> stmts() #List(true) <OD>
+}
+
+void retstmt() #Ret: {}
+{
+	<RETURN> [ expr() ]
 }
 
 void param() #Param: {} {declaration()}
