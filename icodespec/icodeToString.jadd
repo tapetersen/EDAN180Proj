@@ -125,4 +125,5 @@ aspect icodeToString {
         return ""+getValue();
     }
 	public int Code.ifStmts; //Needed for code-generation
+	public int Code.forStmts; //Needed for code-generation
 }

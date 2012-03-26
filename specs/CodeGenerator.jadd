@@ -84,7 +84,20 @@ aspect CodeGenerator {
 	
 	public void ExprStmt.genCode(Code code, TempFactory tempFactory, int blockLevel, Procedure proc) {
 	}
-	public void ForStmt.genCode(Code code, TempFactory tempFactory, int blockLevel, Procedure proc) {
+	public void ForStmt.genCode(Code code, TempFactory tempFactory, int blockLevel,
+			Procedure proc) {
+		String loopLabel = "loop_" + code.forStmts;
+		String endLoop = "endLoop_" + code.forStmts;
+		code.forStmts++;
+		getStmt().genCode(code, tempFactory, blockLevel, proc);
+		code.addInstruction(new LabelDecl(loopLabel));
+		Operand jmpCmp = getExpr().genExpr(code, tempFactory, blockLevel);
+		code.addInstruction(new JmpT(jmpCmp, endLoop));
+		for (Stmt t : getBodys()) {
+			t.genCode(code, tempFactory, blockLevel, proc);
+		}
+		code.addInstruction(new Jmp(loopLabel));
+		code.addInstruction(new LabelDecl(endLoop));
 	}
 	public Operand Numeral.genExpr(Code code, TempFactory tempFactory, int blockLevel) {
 		return new IntConst(getNUMERAL());
@@ -228,5 +241,11 @@ aspect CodeGenerator {
 		 ));
 		 	
 		return res;
+	}
+	public Stmt ForStmt.getStmt(){
+		return (Stmt)getChild(0);
+	}
+	public Expr ForStmt.getExpr(){
+		return (Expr)getChild(1);
 	}
 }

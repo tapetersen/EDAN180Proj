@@ -1,0 +1,6 @@
+procedure main()
+begin
+	for integer k = 0 until k == 5 do
+		k = k + 1;
+	od;
+end;
