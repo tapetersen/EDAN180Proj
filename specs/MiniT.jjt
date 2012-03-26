@@ -132,7 +132,7 @@ void declaration() : {}
 
 void assignment() #Assgn: {}
 {
-  iduse() <ASSIGN> expr() 
+  iduse() <ASSIGN> boolexpr() 
 }
 
 void boolexpr() : {}

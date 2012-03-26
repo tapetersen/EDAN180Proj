@@ -17,7 +17,7 @@ begin
 	q = x == y;
 	q = x != y;
 	q = (x < z or x == y);
-//	q = f or t;
+	q = f or t;
 	q = q and q;
 	q = not q;
 end;
