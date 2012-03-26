@@ -37,9 +37,7 @@ aspect CodeGenerator {
 		code.addInstruction(new Return());
 	}
 	
-	public void Stmt.genCode(Code code, TempFactory tempFactory, int blockLevel, Procedure proc) {
-		return;
-	}
+	abstract public void Stmt.genCode(Code code, TempFactory tempFactory, int blockLevel, Procedure proc);
 	
 	private Variable IdDecl.variable = null;
 	public Variable IdDecl.getVariable() { return variable; }
@@ -63,6 +61,31 @@ aspect CodeGenerator {
 	
 	abstract Operand Expr.genExpr(Code code, TempFactory tempFactory, int blockLevel);
 	
+	
+	
+	public void IfStmt.genCode(Code code, TempFactory tempFactory, int blockLevel, Procedure proc) {
+		String ifLabel = "if_" + code.ifStmts, elseLabel = "else_"
+				+ code.ifStmts;
+		code.ifStmts++;
+		Operand jmpCond = getExpr().genExpr(code, tempFactory, blockLevel);
+		code.addInstruction(new JmpT(jmpCond, ifLabel));
+		code.addInstruction(new JmpF(jmpCond, elseLabel));
+		code.addInstruction(new LabelDecl(ifLabel));
+		for (Stmt s : getIfParts()) {
+			s.genCode(code, tempFactory, blockLevel, null);
+		}
+		if (getElseParts() != null && getElseParts().first != null) {
+			code.addInstruction(new LabelDecl(elseLabel));
+			for (Stmt s : getElseParts()) {
+				s.genCode(code, tempFactory, blockLevel, null);
+			}
+		}
+	}
+	
+	public void ExprStmt.genCode(Code code, TempFactory tempFactory, int blockLevel, Procedure proc) {
+	}
+	public void ForStmt.genCode(Code code, TempFactory tempFactory, int blockLevel, Procedure proc) {
+	}
 	public Operand Numeral.genExpr(Code code, TempFactory tempFactory, int blockLevel) {
 		return new IntConst(getNUMERAL());
 	}

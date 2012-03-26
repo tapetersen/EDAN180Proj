@@ -12,7 +12,6 @@ aspect icodeToString {
         }
         return builder.toString();
     }
-
     String Instruction.comment = "";
     static final int Instruction.commentTab = 5;
     public void Instruction.setComment(String comment) {
@@ -66,6 +65,7 @@ aspect icodeToString {
         buffer.append(getAddress());
     }
 	abstract String UnOpr.opString();
+
 	
     public void BinOpr.appendBody(TabbedBuffer buffer) {
         buffer.append(opString());
@@ -96,6 +96,7 @@ aspect icodeToString {
     String IntLe.opString() {return "INTLE";}
     String IntGt.opString() {return "INTGT";}
     String IntGe.opString() {return "INTGE";}
+    String IntNeg.opString() {return "INTNEG";}
     String BoolAnd.opString() {return "AND";}
     String BoolOr.opString() {return "OR";}
     String BoolNot.opString() {return "NOT";}
@@ -123,4 +124,5 @@ aspect icodeToString {
     public String IntConst.toString() {
         return ""+getValue();
     }
+	public int Code.ifStmts; //Needed for code-generation
 }
