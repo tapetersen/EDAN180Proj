@@ -3,4 +3,7 @@ begin
 	for integer k = 0 until k == 5 do
 		k = k + 1;
 	od;
+	for integer i = 0 until i == 8 do
+		i = i + 1;
+	od;
 end;
