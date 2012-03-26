@@ -19,7 +19,7 @@ public class Semantic {
 		currentProcedure.push(p);
 	}
 	
-	public void exitProcedure(Procedure p) {
+	public void exitProcedure() {
 		currentProcedure.pop();
 	}
 	
