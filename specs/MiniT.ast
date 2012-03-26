@@ -1,7 +1,7 @@
 Start ::= Procedure;
 
 abstract Stmt;
-Procedure: Stmt ::= Id Param* Stmt*;
+Procedure: Stmt ::= [Type] Id Param* Stmt*;
 IdDecl: Stmt ::= Type Id [Expr];
 Param: IdDecl;
 Assgn: Stmt ::= IdUse Expr;

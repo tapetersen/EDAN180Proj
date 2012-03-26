@@ -94,7 +94,7 @@ void procedure() #Procedure: {}
 
 void proc_header() : {}
 {
-  <PROCEDURE> id() <LPAR> ([ param() ( <COMMA> declaration() )* ]) #List(true) <RPAR>
+  <PROCEDURE> [ type() ] #Opt(true) id() <LPAR> ([ param() ( <COMMA> declaration() )* ]) #List(true) <RPAR>
 }
 
 void proc_body() : {}

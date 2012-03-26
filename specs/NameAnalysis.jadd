@@ -112,6 +112,4 @@ aspect NameAnalysis {
 			s.addError(e);
 		}
 	}
-	
-	
 }
