@@ -61,9 +61,7 @@ aspect CodeGenerator {
 		return decl().getVariable();
 	}
 	
-	public Operand Expr.genExpr(Code code, TempFactory tempFactory, int blockLevel) {
-		return null;
-	}
+	abstract Operand Expr.genExpr(Code code, TempFactory tempFactory, int blockLevel);
 	
 	public Operand Numeral.genExpr(Code code, TempFactory tempFactory, int blockLevel) {
 		return new IntConst(getNUMERAL());
@@ -103,6 +101,105 @@ aspect CodeGenerator {
 	public Operand Div.genExpr(Code code, TempFactory tempFactory, int blockLevel) {
 		Address res = tempFactory.create();
 		code.addInstruction(new IntDiv(
+			getLeft().genExpr(code, tempFactory, blockLevel),
+		 	getRight().genExpr(code, tempFactory, blockLevel),
+		 	res
+		 ));
+		 	
+		return res;
+	}
+	public Operand And.genExpr(Code code, TempFactory tempFactory, int blockLevel) {
+		Address res = tempFactory.create();
+		code.addInstruction(new BoolAnd(
+			getLeft().genExpr(code, tempFactory, blockLevel),
+		 	getRight().genExpr(code, tempFactory, blockLevel),
+		 	res
+		 ));
+		 	
+		return res;
+	}
+	public Operand Bool.genExpr(Code code, TempFactory tempFactory, int blockLevel) {
+		return null;
+	}
+	public Operand Eq.genExpr(Code code, TempFactory tempFactory, int blockLevel) {
+		Address res = tempFactory.create();
+		code.addInstruction(new IntEq(
+			getLeft().genExpr(code, tempFactory, blockLevel),
+		 	getRight().genExpr(code, tempFactory, blockLevel),
+		 	res
+		 ));
+		 	
+		return res;
+	}
+	public Operand FuncCall.genExpr(Code code, TempFactory tempFactory, int blockLevel) {
+		return null;
+	}
+	public Operand Gt.genExpr(Code code, TempFactory tempFactory, int blockLevel) {
+		Address res = tempFactory.create();
+		code.addInstruction(new IntGt(
+			getLeft().genExpr(code, tempFactory, blockLevel),
+		 	getRight().genExpr(code, tempFactory, blockLevel),
+		 	res
+		 ));
+		 	
+		return res;
+	}
+	public Operand Gte.genExpr(Code code, TempFactory tempFactory, int blockLevel) {
+		Address res = tempFactory.create();
+		code.addInstruction(new IntGe(
+			getLeft().genExpr(code, tempFactory, blockLevel),
+		 	getRight().genExpr(code, tempFactory, blockLevel),
+		 	res
+		 ));
+		 	
+		return res;
+	}
+	public Operand Lt.genExpr(Code code, TempFactory tempFactory, int blockLevel) {
+		Address res = tempFactory.create();
+		code.addInstruction(new IntLt(
+			getLeft().genExpr(code, tempFactory, blockLevel),
+		 	getRight().genExpr(code, tempFactory, blockLevel),
+		 	res
+		 ));
+		 	
+		return res;
+	}
+	public Operand Lte.genExpr(Code code, TempFactory tempFactory, int blockLevel) {
+		Address res = tempFactory.create();
+		code.addInstruction(new IntLe(
+			getLeft().genExpr(code, tempFactory, blockLevel),
+		 	getRight().genExpr(code, tempFactory, blockLevel),
+		 	res
+		 ));
+		 	
+		return res;
+	}
+	public Operand Neg.genExpr(Code code, TempFactory tempFactory, int blockLevel) {
+		return null;
+	}
+	public Operand Neq.genExpr(Code code, TempFactory tempFactory, int blockLevel) {
+		Address res = tempFactory.create();
+		code.addInstruction(new IntNe(
+			getLeft().genExpr(code, tempFactory, blockLevel),
+		 	getRight().genExpr(code, tempFactory, blockLevel),
+		 	res
+		 ));
+		 	
+		return res;
+	}
+	public Operand Not.genExpr(Code code, TempFactory tempFactory, int blockLevel) {
+		Address res = tempFactory.create();
+		code.addInstruction(new BoolNot(
+			getLeft().genExpr(code, tempFactory, blockLevel),
+		 	getRight().genExpr(code, tempFactory, blockLevel),
+		 	res
+		 ));
+		 	
+		return res;
+	}
+	public Operand Or.genExpr(Code code, TempFactory tempFactory, int blockLevel) {
+		Address res = tempFactory.create();
+		code.addInstruction(new BoolOr(
 			getLeft().genExpr(code, tempFactory, blockLevel),
 		 	getRight().genExpr(code, tempFactory, blockLevel),
 		 	res

@@ -88,6 +88,9 @@ aspect icodeToString {
     String IntLe.opString() {return "INTLE";}
     String IntGt.opString() {return "INTGT";}
     String IntGe.opString() {return "INTGE";}
+    String BoolAnd.opString() {return "AND";}
+    String BoolOr.opString() {return "OR";}
+    String BoolNot.opString() {return "NOT";}
     String JmpF.opString() {return "JMPF";}
     String JmpT.opString() {return "JMPT";}
 
