@@ -109,14 +109,13 @@ void stmts() : {}
 
 void stmt() : {}
 {
-  ( procedure() | iddecl() | LOOKAHEAD(3) assignment() | LOOKAHEAD(3) boolexpr() #ExprStmt | ifstmt() | forstmt() )
+  ( procedure() | iddecl() | LOOKAHEAD(3) assignment() | LOOKAHEAD(3) expr() #ExprStmt | ifstmt() | forstmt() )
 }
 
 void ifstmt() #IfStmt: {}
 {
   <IF> expr() <THEN> stmts() #List(true) [<ELSE> stmts()] #List(true) <FI>
 }
-
 
 void forstmt() #ForStmt: {}
 {
@@ -127,12 +126,18 @@ void param() #Param: {} {declaration()}
 void iddecl() #IdDecl: {} {declaration()}
 void declaration() : {}
 {
-  type() id() ([ <ASSIGN> expr() ]) #Opt(true)
+  type() id() ([ <ASSIGN> boolexpr() ]) #Opt(true)
 }
 
 void assignment() #Assgn: {}
 {
   iduse() <ASSIGN> boolexpr() 
+}
+
+
+void expr() : {}
+{
+	boolexpr()
 }
 
 void boolexpr() : {}
@@ -142,10 +147,10 @@ void boolexpr() : {}
 
 void boolterm() : {}
 {
-	expr() ( <AND> expr() #And(2) )*
+	relexpr() ( <AND> relexpr() #And(2) )*
 }
 
-void expr() : {}
+void relexpr() : {}
 {
   numexpr() [
       <LT> numexpr() #Lt(2)
@@ -159,7 +164,7 @@ void expr() : {}
 
 void numexpr() : {}
 {
-  term() ( 
+  term() (
       <ADD> term() #Add(2) 
     | <SUB> term() #Sub(2)
   )*
@@ -179,7 +184,7 @@ void factor() : {}
   | iduse() 
   | numeral() 
   | bool() 
-  | <LPAR> boolexpr() <RPAR> 
+  | <LPAR> expr() <RPAR> 
   | <SUB> factor() #Neg(1) 
   | <NOT> factor() #Not(1)
   
