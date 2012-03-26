@@ -124,7 +124,7 @@ void forstmt() #ForStmt: {}
 
 void retstmt() #Ret: {}
 {
-	<RETURN> [ expr() ]
+	<RETURN> [ expr() ] #Opt(true) 
 }
 
 void param() #Param: {} {declaration()}
