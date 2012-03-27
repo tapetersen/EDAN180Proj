@@ -1,12 +1,9 @@
 package test;
 
 import icode.Code;
-
 import java.io.File;
 import java.io.FileReader;
-
 import org.junit.Test;
-
 import parser.MiniT;
 import semantic.Semantic;
 

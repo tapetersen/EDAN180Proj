@@ -85,7 +85,7 @@ aspect NameAnalysis {
 	
 	public void ASTNode.procAnalysis(SymbolTable<String, Procedure> table, Semantic s) {
 		for (int k=0; k<getNumChild(); k++) {
-			getChild(k).gatherProcedures(table, s);
+			getChild(k).procAnalysis(table, s);
 		}
 	}
 		
@@ -115,9 +115,10 @@ aspect NameAnalysis {
 	}
 	
 	public void FuncCall.procAnalysis(SymbolTable<String, Procedure> table, Semantic s) {
-		declNode = table.lookup(getId().getID());
+		String id = getId().getID();
+		declNode = table.lookup(id);
 		if(declNode == null)
-			s.addError(new NameError("Function: "+getId().getID()+" not declared."));
+			s.addError(new NameError("Function: "+id+" not declared."));
 	}
 	
 	public void ASTNode.gatherProcedures(SymbolTable<String, Procedure> table, Semantic s) {

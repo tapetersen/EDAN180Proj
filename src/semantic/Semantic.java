@@ -1,7 +1,6 @@
 package semantic;
 import parser.Procedure;
 import semanticlib.SymbolTable;
-
 import java.util.ArrayList;
 import java.util.Stack;
 

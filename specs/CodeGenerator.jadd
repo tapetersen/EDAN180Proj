@@ -4,6 +4,7 @@ import java.util.ArrayList;
 aspect CodeGenerator {
 	public void Start.genCode(Code code, Semantic s) {
 		nameAnalysis(s);
+		typeAnalysis(s);
 		genCode(code, new TempFactory(), 0, null);
 	}
 	public void Start.genCode(Code code, TempFactory tempFactory, int blockLevel, Procedure proc) {
@@ -60,30 +61,41 @@ aspect CodeGenerator {
 	}
 	
 	abstract Operand Expr.genExpr(Code code, TempFactory tempFactory, int blockLevel);
-	
-	
-	
 	public void IfStmt.genCode(Code code, TempFactory tempFactory, int blockLevel, Procedure proc) {
-		String ifLabel = "if_" + code.ifStmts, elseLabel = "else_"
-				+ code.ifStmts;
+		String ifLabel = "if_" + code.ifStmts;
+		String elseLabel = "else_" + code.ifStmts;
+		String fiLabel = "fi_" + code.ifStmts;
 		code.ifStmts++;
+		
 		Operand jmpCond = getExpr().genExpr(code, tempFactory, blockLevel);
 		code.addInstruction(new JmpT(jmpCond, ifLabel));
-		code.addInstruction(new JmpF(jmpCond, elseLabel));
+		
+		if(getNumElsePart() > 0)
+			code.addInstruction(new Jmp(elseLabel));
+		else 
+			code.addInstruction(new Jmp(fiLabel));
+			
 		code.addInstruction(new LabelDecl(ifLabel));
 		for (Stmt s : getIfParts()) {
 			s.genCode(code, tempFactory, blockLevel, null);
 		}
-		if (getElseParts() != null && getElseParts().first != null) {
+		if (getNumElsePart() > 0) {
 			code.addInstruction(new LabelDecl(elseLabel));
 			for (Stmt s : getElseParts()) {
 				s.genCode(code, tempFactory, blockLevel, null);
 			}
 		}
+		code.addInstruction(new LabelDecl(fiLabel));
+		
 	}
 	
 	public void ExprStmt.genCode(Code code, TempFactory tempFactory, int blockLevel, Procedure proc) {
+		code.addInstruction( new Move(
+			getExpr().genExpr(code, tempFactory, blockLevel),
+			tempFactory.create()
+		));
 	}
+	
 	public void ForStmt.genCode(Code code, TempFactory tempFactory, int blockLevel,
 			Procedure proc) {
 		String loopLabel = "loop_" + code.forStmts;
@@ -110,7 +122,6 @@ aspect CodeGenerator {
 		 	getRight().genExpr(code, tempFactory, blockLevel),
 		 	res
 		 ));
-		 	
 		return res;
 	}
 	
