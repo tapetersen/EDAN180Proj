@@ -1,10 +1,14 @@
 package test;
 
 import icode.Code;
+
 import java.io.File;
 import java.io.FileReader;
+
 import org.junit.Test;
+
 import parser.MiniT;
+import parser.Start;
 import semantic.Semantic;
 
 public class TestCodeGen extends TestCaseOutput {
@@ -27,8 +31,11 @@ public class TestCodeGen extends TestCaseOutput {
 		try {
 			Code code = new Code();
 			MiniT parser = new MiniT(new FileReader(arg));
+			Start start = parser.start();
 			Semantic s = new Semantic();
-			parser.start().genCode(code, s);
+			start.nameAnalysis(s);
+			start.typeAnalysis(s);
+			start.genCode(code, s);
 			System.out.println(code);
 		} catch (Exception e) {
 			e.printStackTrace();

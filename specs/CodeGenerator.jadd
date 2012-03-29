@@ -3,9 +3,9 @@ import util.*;
 import java.util.ArrayList;
 aspect CodeGenerator {
 	public void Start.genCode(Code code, Semantic s) {
-		nameAnalysis(s);
-		typeAnalysis(s);
-		genCode(code, new TempFactory(), 0, null);
+		for(Procedure p : s.getProcedures()) {
+			p.genCode(code, new TempFactory(), 0);
+		}
 	}
 	public void Start.genCode(Code code, TempFactory tempFactory, int blockLevel, Procedure proc) {
 		getProcedure().genCode(code, tempFactory, -1, null);
@@ -17,10 +17,12 @@ aspect CodeGenerator {
 		
 	private int Procedure.numVars;
 	private int Procedure.blockLevel;
-	public void Procedure.genCode(Code code, TempFactory tempFactory, int blockLevel, Procedure proc) {
-		blockLevel = proc == null ? 0 : proc.blockLevel+1;
-		
-		numVars = 0;
+	public void Procedure.genCode(Code code, TempFactory tempFactory, int blockLevel, Procedure p) {
+		// don't recurse into procedures
+		return;
+	}
+	
+	public void Procedure.genCode(Code code, TempFactory tempFactory, int blockLevel) {
 		
 		code.addInstruction(new LabelDecl(label()));
 		
@@ -34,7 +36,7 @@ aspect CodeGenerator {
 		}
 			
 		enter.setTemps(tempFactory.getNumberOfTemps());
-		enter.setVars(numVars);
+		enter.setVars(0);
 		code.addInstruction(new Return());
 	}
 	
@@ -67,26 +69,34 @@ aspect CodeGenerator {
 		String fiLabel = "fi_" + code.ifStmts;
 		code.ifStmts++;
 		
+		// Initial condition checking
 		Operand jmpCond = getExpr().genExpr(code, tempFactory, blockLevel);
 		code.addInstruction(new JmpT(jmpCond, ifLabel));
 		
+		// Jump to fi or else part if it exists
 		if(getNumElsePart() > 0)
 			code.addInstruction(new Jmp(elseLabel));
 		else 
 			code.addInstruction(new Jmp(fiLabel));
-			
+		
+		// Generate if part	
 		code.addInstruction(new LabelDecl(ifLabel));
 		for (Stmt s : getIfParts()) {
 			s.genCode(code, tempFactory, blockLevel, null);
 		}
+		code.addInstruction(new Jmp(fiLabel));
+		
+		// generate else part id exists
 		if (getNumElsePart() > 0) {
 			code.addInstruction(new LabelDecl(elseLabel));
 			for (Stmt s : getElseParts()) {
 				s.genCode(code, tempFactory, blockLevel, null);
 			}
+			// jump explicitly, ev. removed by optimizer :)
+			code.addInstruction(new Jmp(fiLabel));
 		}
-		code.addInstruction(new LabelDecl(fiLabel));
 		
+		code.addInstruction(new LabelDecl(fiLabel));
 	}
 	
 	public void ExprStmt.genCode(Code code, TempFactory tempFactory, int blockLevel, Procedure proc) {
