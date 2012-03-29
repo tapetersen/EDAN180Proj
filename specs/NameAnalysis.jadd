@@ -85,8 +85,8 @@ aspect NameAnalysis {
 	private int Procedure.blockLevel = -1;
 	public int Procedure.blockLevel() { return blockLevel; }
 	public void Procedure.nameAnalysis(SymbolTable<String, IdDecl> table, Semantic s) {
-		blockLevel = table.blockLevel();
 		table.enterBlock();
+		blockLevel = table.blockLevel();
 		super.nameAnalysis(table, s);
 		table.exitBlock();
 	}

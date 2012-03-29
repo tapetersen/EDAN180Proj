@@ -54,6 +54,8 @@ aspect CodeGenerator {
 	}
 	
 	public Address Param.genAddress(int blockLevel) {
+		if(id().equals("n"))
+			System.out.println("blockLevel: "+blockLevel+" declLevel: "+declLevel+" varNum: "+varNum); 
 		return new Parameter(blockLevel-declLevel, varNum);
 	}
 		
