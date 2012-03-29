@@ -7,9 +7,6 @@ aspect CodeGenerator {
 			p.genCode(code, new TempFactory(), 0);
 		}
 	}
-	public void Start.genCode(Code code, TempFactory tempFactory, int blockLevel, Procedure proc) {
-		getProcedure().genCode(code, tempFactory, -1, null);
-	}
 	
 	private int Procedure.numVars = 0;
 	public int Procedure.addVar(IdDecl decl) {
@@ -44,7 +41,7 @@ aspect CodeGenerator {
 		}
 			
 		enter.setTemps(tempFactory.getNumberOfTemps());
-		enter.setVars(0);
+		enter.setVars(numVars);
 		code.addInstruction(new Return());
 	}
 	
@@ -63,7 +60,7 @@ aspect CodeGenerator {
 		varNum = proc.addVar(this);
 		if(hasExpr())
 			code.addInstruction(new Move(
-			getExpr().genExpr(code, tempFactory, blockLevel),
+			getExpr().genExpr(code, tempFactory, proc.blockLevel()),
 			new Variable(0, varNum)
 		));
 	}
@@ -72,15 +69,16 @@ aspect CodeGenerator {
 		varNum = proc.addPar(this);
 		if(hasExpr())
 			code.addInstruction(new Move(
-				getExpr().genExpr(code, tempFactory, blockLevel),
+				getExpr().genExpr(code, tempFactory, proc.blockLevel()),
 				new Parameter(0, varNum)
 		));
 	}
 	
 	public void Assgn.genCode(Code code, TempFactory tempFactory, int blockLevel, Procedure proc) {
+		
 		code.addInstruction(new Move(
-			getExpr().genExpr(code, tempFactory, blockLevel),
-			getIdUse().decl().genAddress(blockLevel)
+			getExpr().genExpr(code, tempFactory, proc.blockLevel()),
+			getIdUse().decl().genAddress(proc.blockLevel())
 		));
 	}
 
