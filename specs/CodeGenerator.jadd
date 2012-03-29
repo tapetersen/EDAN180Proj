@@ -11,12 +11,12 @@ aspect CodeGenerator {
 		getProcedure().genCode(code, tempFactory, -1, null);
 	}
 	
-	private int Procedure.numVars;
+	private int Procedure.numVars = 0;
 	public int Procedure.addVar(IdDecl decl) {
 		return numVars++;
 	}
 	
-	private int Procedure.numParam;
+	private int Procedure.numParam = 0;
 	public int Procedure.addPar(IdDecl decl) {
 		return numParam++;
 	}
@@ -35,6 +35,10 @@ aspect CodeGenerator {
 		enter = new Enter(0, 0);
 		code.addInstruction(enter);
 		
+		for(Param p : getParams()) {
+			p.genCode(code, tempFactory, blockLevel, this);
+		}
+		
 		for(Stmt t: getStmts()) {
 			t.genCode(code, tempFactory, blockLevel, this);
 		}
@@ -46,16 +50,12 @@ aspect CodeGenerator {
 	
 	abstract public void Stmt.genCode(Code code, TempFactory tempFactory, int blockLevel, Procedure proc);
 	
-	private Variable IdDecl.variable = null;
 	public int IdDecl.varNum = -1;
-	
 	public Address IdDecl.genAddress(int blockLevel) {
 		return new Variable(blockLevel-declLevel, varNum);
 	}
 	
 	public Address Param.genAddress(int blockLevel) {
-		if(id().equals("n"))
-			System.out.println("blockLevel: "+blockLevel+" declLevel: "+declLevel+" varNum: "+varNum); 
 		return new Parameter(blockLevel-declLevel, varNum);
 	}
 		
@@ -96,7 +96,6 @@ aspect CodeGenerator {
 		code.ifStmts++;
 		
 		// Initial condition checking
-		System.out.println("proc.blockLevel: "+proc.blockLevel());
 		Operand jmpCond = getExpr().genExpr(code, tempFactory, proc.blockLevel());
 		code.addInstruction(new JmpT(jmpCond, ifLabel));
 		
