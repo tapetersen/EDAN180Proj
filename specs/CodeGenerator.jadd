@@ -11,12 +11,16 @@ aspect CodeGenerator {
 		getProcedure().genCode(code, tempFactory, -1, null);
 	}
 	
+	private int Procedure.numVars;
 	public int Procedure.addVar(IdDecl decl) {
 		return numVars++;
 	}
+	
+	private int Procedure.numParam;
+	public int Procedure.addPar(IdDecl decl) {
+		return numParam++;
+	}
 		
-	private int Procedure.numVars;
-	private int Procedure.blockLevel;
 	public void Procedure.genCode(Code code, TempFactory tempFactory, int blockLevel, Procedure p) {
 		// don't recurse into procedures
 		return;
@@ -43,23 +47,43 @@ aspect CodeGenerator {
 	abstract public void Stmt.genCode(Code code, TempFactory tempFactory, int blockLevel, Procedure proc);
 	
 	private Variable IdDecl.variable = null;
-	public Variable IdDecl.getVariable() { return variable; }
+	public int IdDecl.varNum = -1;
+	
+	public Address IdDecl.genAddress(int blockLevel) {
+		return new Variable(blockLevel-declLevel, varNum);
+	}
+	
+	public Address Param.genAddress(int blockLevel) {
+		return new Parameter(blockLevel-declLevel, varNum);
+	}
+		
 	public void IdDecl.genCode(Code code, TempFactory tempFactory, int blockLevel, Procedure proc) {
-		int offset = proc.addVar(this);
-		variable = new Variable(blockLevel, offset);
+		varNum = proc.addVar(this);
 		if(hasExpr())
-			code.addInstruction(new Move(getExpr().genExpr(code, tempFactory, blockLevel), variable));
+			code.addInstruction(new Move(
+			getExpr().genExpr(code, tempFactory, blockLevel),
+			new Variable(0, varNum)
+		));
+	}
+	
+	public void Param.genCode(Code code, TempFactory tempFactory, int blockLevel, Procedure proc) {
+		varNum = proc.addPar(this);
+		if(hasExpr())
+			code.addInstruction(new Move(
+				getExpr().genExpr(code, tempFactory, blockLevel),
+				new Parameter(0, varNum)
+		));
 	}
 	
 	public void Assgn.genCode(Code code, TempFactory tempFactory, int blockLevel, Procedure proc) {
 		code.addInstruction(new Move(
 			getExpr().genExpr(code, tempFactory, blockLevel),
-			getIdUse().decl().getVariable()
+			getIdUse().decl().genAddress(blockLevel)
 		));
 	}
 
 	public Operand IdUse.genExpr(Code code, TempFactory tempFactory, int blockLevel) {
-		return decl().getVariable();
+		return decl().genAddress(blockLevel);
 	}
 	
 	abstract Operand Expr.genExpr(Code code, TempFactory tempFactory, int blockLevel);
@@ -70,7 +94,8 @@ aspect CodeGenerator {
 		code.ifStmts++;
 		
 		// Initial condition checking
-		Operand jmpCond = getExpr().genExpr(code, tempFactory, blockLevel);
+		System.out.println("proc.blockLevel: "+proc.blockLevel());
+		Operand jmpCond = getExpr().genExpr(code, tempFactory, proc.blockLevel());
 		code.addInstruction(new JmpT(jmpCond, ifLabel));
 		
 		// Jump to fi or else part if it exists
@@ -101,7 +126,7 @@ aspect CodeGenerator {
 	
 	public void ExprStmt.genCode(Code code, TempFactory tempFactory, int blockLevel, Procedure proc) {
 		code.addInstruction( new Move(
-			getExpr().genExpr(code, tempFactory, blockLevel),
+			getExpr().genExpr(code, tempFactory, proc.blockLevel()),
 			tempFactory.create()
 		));
 	}
@@ -113,7 +138,7 @@ aspect CodeGenerator {
 		code.forStmts++;
 		getStmt().genCode(code, tempFactory, blockLevel, proc);
 		code.addInstruction(new LabelDecl(loopLabel));
-		Operand jmpCmp = getExpr().genExpr(code, tempFactory, blockLevel);
+		Operand jmpCmp = getExpr().genExpr(code, tempFactory, proc.blockLevel());
 		code.addInstruction(new JmpT(jmpCmp, endLoop));
 		for (Stmt t : getBodys()) {
 			t.genCode(code, tempFactory, blockLevel, proc);
@@ -206,6 +231,8 @@ aspect CodeGenerator {
 		}
 		
 		code.addInstruction(new Call(decl().label(), blockLevel));
+		
+		// clean args
 		code.addInstruction(new Dealloc(decl().getNumParam()));
 		return new Result();
 	}

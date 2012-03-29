@@ -5,24 +5,30 @@ aspect NameAnalysis {
 	
 	public void Start.nameAnalysis(Semantic s) {
 		SymbolTable<String, IdDecl> table = new SymbolTable<String, IdDecl>();
+		table.enterBlock();
 		nameAnalysis(table, s);
+		table.exitBlock(); // pedantic
+		
+		
 		SymbolTable<String, Procedure> procTable = new SymbolTable<String, Procedure>();
 		
 		// gather toplevel procedures
+		procTable.enterBlock();
 		gatherProcedures(procTable, s);
 		procAnalysis(procTable, s);
+		procTable.exitBlock();
 	}
 	
 	void ASTNode.nameAnalysis(SymbolTable<String, IdDecl> table, Semantic s) {
-		table.enterBlock();
 		for (int k=0; k<getNumChild(); k++) {
 			getChild(k).nameAnalysis(table, s);
 		}
 	}
 	
+	protected int IdDecl.declLevel = -1;
 	void IdDecl.nameAnalysis(SymbolTable<String, IdDecl> table, Semantic s) {
 		super.nameAnalysis(table, s);
-		blocklevel = table.blockLevel();
+		declLevel = table.blockLevel();
 		try {
 			table.add(getId().getID(), this);
 		} catch(NameError e) {
@@ -76,8 +82,10 @@ aspect NameAnalysis {
 			s.addError(new NameError("Id: "+getId().getID()+" not declared."));
 	}
 	
+	private int Procedure.blockLevel = -1;
+	public int Procedure.blockLevel() { return blockLevel; }
 	public void Procedure.nameAnalysis(SymbolTable<String, IdDecl> table, Semantic s) {
-	
+		blockLevel = table.blockLevel();
 		table.enterBlock();
 		super.nameAnalysis(table, s);
 		table.exitBlock();
@@ -129,7 +137,6 @@ aspect NameAnalysis {
 	
 	public void Procedure.gatherProcedures(SymbolTable<String, Procedure> table, Semantic s) {
 		// just add the procedure for binding, don't recurse
-		table.enterBlock();
 		try {
 			table.add(id(), this);
 		} catch (NameError e) {
