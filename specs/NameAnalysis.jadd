@@ -126,7 +126,7 @@ aspect NameAnalysis {
 		String id = getId().getID();
 		declNode = table.lookup(id);
 		if(declNode == null)
-			s.addError(new NameError("Function: "+id+" not declared."));
+			s.addError(new NameError("Function: "+id+" not declared.", beginLine()));
 	}
 	
 	public void ASTNode.gatherProcedures(SymbolTable<String, Procedure> table, Semantic s) {

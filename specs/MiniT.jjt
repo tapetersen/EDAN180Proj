@@ -18,7 +18,9 @@ PARSER_END(MiniT)
 /* SCANNER */
 
 /* Skip whitespace */
-SKIP : { " " | "\t" | "\n" | "\r" }
+SKIP : { " " | "\t" | "\n" | "\r" | <":P" (~["\n"])* "\n"> }
+
+
 
 /* Reserved words */
 TOKEN: {
