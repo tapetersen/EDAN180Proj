@@ -193,10 +193,21 @@ aspect CodeGenerator {
 	}
 	
 	public Operand FuncCall.genExpr(Code code, TempFactory tempFactory, int blockLevel) {
-		Address res = tempFactory.create();
+		
+		// Alloc params
+		code.addInstruction(new Alloc(getNumArg()));
+		
+		// set params
+		for(int i=0;  i<getNumArg(); i++) {
+			code.addInstruction(
+				new Move(getArg(i).genExpr(code, tempFactory, blockLevel),
+				new Argument(i)
+			));
+		}
+		
 		code.addInstruction(new Call(decl().label(), blockLevel));
-		code.addInstruction(new Move(new Result(), res));
-		return res;
+		code.addInstruction(new Dealloc(decl().getNumParam()));
+		return new Result();
 	}
 	
 	public Operand Gt.genExpr(Code code, TempFactory tempFactory, int blockLevel) {
