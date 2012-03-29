@@ -34,7 +34,15 @@ public class TestCodeGen extends TestCaseOutput {
 			Start start = parser.start();
 			Semantic s = new Semantic();
 			start.nameAnalysis(s);
+			if (s.numErrors() > 0) {
+				s.printAnalysis();
+				return;
+			}
 			start.typeAnalysis(s);
+			if (s.numErrors() > 0) {
+				s.printAnalysis();
+				return;
+			}
 			start.genCode(code, s);
 			System.out.println(code);
 		} catch (Exception e) {
