@@ -15,37 +15,37 @@ aspect TypeAnalysis {
 	void IdDecl.typeAnalysis(Semantic s) {
 		if(hasExpr())
 			if(getExpr().type() != type())
-				s.addError( new TypeError("var: "+this.id()+" has type: "+type()+" found: "+getExpr().type()));
+				s.addError( new TypeError("var: "+this.id()+" has type: "+type()+" found: "+getExpr().type(), beginLine()));
 	}
 	
 	public void UnExpr.typeAnalysis(Semantic s) {
 		if(getOperand().type() != argtype())
-			s.addError( new TypeError("expected type: "+argtype()+" found: "+getOperand().type()));
+			s.addError( new TypeError("expected type: "+argtype()+" found: "+getOperand().type(), beginLine()));
 		super.typeAnalysis(s);
 	}
 	
 	public void BinExpr.typeAnalysis(Semantic s) {
 		if(getLeft().type() != argtype())
-			s.addError( new TypeError("expected leftoperand type: "+argtype()+" found: "+getLeft().type()));
+			s.addError( new TypeError("expected leftoperand type: "+argtype()+" found: "+getLeft().type(), beginLine()));
 		if(getRight().type() != argtype())
-			s.addError( new TypeError("expected leftoperand type: "+argtype()+" found: "+getRight().type()));
+			s.addError( new TypeError("expected leftoperand type: "+argtype()+" found: "+getRight().type(), beginLine()));
 		super.typeAnalysis(s);
 	}
 	
 	public void FuncCall.typeAnalysis(Semantic s) {
 		if(getNumArg() != decl().getNumParam()) {
-			s.addError( new TypeError(""+decl()+" called with wrong number of params."));
+			s.addError( new TypeError(""+decl()+" called with wrong number of params.", beginLine()));
 			return;
 		}
 		for(int i=0; i<getNumArg(); i++) {
 			if(getArg(i).type() != decl().getParam(i).type())
-				s.addError( new TypeError("Param " + i + " type mismatch."));
+				s.addError( new TypeError("Param " + i + " type mismatch.", beginLine()));
 		}
 	}
 	
 	public void Ret.typeAnalysis(Semantic s) {
 		if(!hasExpr() && proc().hasType())
-			s.addError( new TypeError("return with expression from function without type"));
+			s.addError( new TypeError("return with expression from function without type", beginLine()));
 	}
 	
 	public String IdUse.type() {

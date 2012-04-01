@@ -11,5 +11,5 @@ public class NameError extends MiniTError {
 	public NameError(String message) {
 		super(message, -1);
 	}
-
+	
 }

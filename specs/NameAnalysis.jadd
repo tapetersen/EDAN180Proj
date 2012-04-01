@@ -31,8 +31,8 @@ aspect NameAnalysis {
 		declLevel = table.blockLevel();
 		try {
 			table.add(getId().getID(), this);
-		} catch(NameError e) {
-			s.addError(e);
+		} catch(Exception e) {
+			s.addError(new NameError(e.getMessage(), beginLine()));
 		}
 	}
 	
@@ -42,6 +42,7 @@ aspect NameAnalysis {
 			id = getId().getID();
 		return id;
 	}
+	
 	private String Procedure.id = null;
 	public String Procedure.id() {
 		if(id == null)
@@ -79,7 +80,7 @@ aspect NameAnalysis {
 	public void IdUse.nameAnalysis(SymbolTable<String, IdDecl> table, Semantic s) {
 		declNode = table.lookup(getId().getID());
 		if(declNode == null)
-			s.addError(new NameError("Id: "+getId().getID()+" not declared."));
+			s.addError(new NameError("Id: "+getId().getID()+" not declared.", beginLine()));
 	}
 	
 	private int Procedure.blockLevel = -1;
@@ -139,8 +140,8 @@ aspect NameAnalysis {
 		// just add the procedure for binding, don't recurse
 		try {
 			table.add(id(), this);
-		} catch (NameError e) {
-			s.addError(e);
+		} catch (Exception e) {
+			s.addError(new NameError(e.getMessage(), beginLine()));
 		}
 	}
 }

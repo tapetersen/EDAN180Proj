@@ -2,18 +2,21 @@ package semantic;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Map;
+import java.util.SortedMap;
 import java.util.Stack;
+import java.util.TreeMap;
 
 import parser.Procedure;
 
 public class Semantic {
 
-	private ArrayList<Exception> errors;
+	private SortedMap<Integer, Exception> errors;
 	private Stack<Procedure> currentProcedure;
 	private ArrayList<Procedure> procedures;
 
 	public Semantic() {
-		errors = new ArrayList<Exception>();
+		errors = new TreeMap<Integer, Exception>();
 		procedures = new ArrayList<Procedure>();
 		currentProcedure = new Stack<Procedure>();
 	}
@@ -37,10 +40,14 @@ public class Semantic {
 		return currentProcedure.peek();
 	}
 
-	public void addError(Exception e) {
-		errors.add(e);
+	public void addError(Exception e, int line) {
+		errors.put(line, e);
 	}
-
+	
+	public void addError(MiniTError e) {
+		errors.put(e.getLine(), e);
+	}
+	
 	public int numErrors() {
 		return errors.size();
 	}
@@ -50,8 +57,8 @@ public class Semantic {
 			System.out.println("No errors!");
 		else {
 			System.out.println("errors found");
-			for (Exception e : errors)
-				System.out.println("Error: " + e);
+			for (Map.Entry<Integer, Exception> e : errors.entrySet())
+				System.out.println(""+e.getKey()+": Error: " + e.getValue());
 		}
 	}
 }

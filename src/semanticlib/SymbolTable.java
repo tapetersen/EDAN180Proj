@@ -16,12 +16,12 @@ public class SymbolTable<K, V> {
      * symbol will shadow existing symbols of the same name.
      * @throws NameError 
      */
-    public void add(K symbol, V meaning) throws NameError {
+    public void add(K symbol, V meaning) throws Exception {
         if (top == null)
             throw new RuntimeException(
                     "SymbolTable.add was called without any prior call to enterBlock");
         if(top.containsKey(symbol))
-        	throw new NameError("Name already defined at this level");
+        	throw new Exception("Name already defined at this level");
         		
         top.put(symbol, meaning);
         
