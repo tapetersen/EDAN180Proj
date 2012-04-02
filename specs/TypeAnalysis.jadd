@@ -24,6 +24,12 @@ aspect TypeAnalysis {
 		super.typeAnalysis(s);
 	}
 	
+	public void Assgn.typeAnalysis(Semantic s) {
+		if(getExpr().type() != getIdUse().type())
+			s.addError( new TypeError("var: "+getIdUse().decl().id()+" has type: "+getIdUse().type()+" found: "+getExpr().type(), beginLine()));
+		super.typeAnalysis(s);
+	}
+	
 	public void BinExpr.typeAnalysis(Semantic s) {
 		if(getLeft().type() != argtype())
 			s.addError( new TypeError("expected leftoperand type: "+argtype()+" found: "+getLeft().type(), beginLine()));
@@ -46,6 +52,16 @@ aspect TypeAnalysis {
 	public void Ret.typeAnalysis(Semantic s) {
 		if(!hasExpr() && proc().hasType())
 			s.addError( new TypeError("return with expression from function without type", beginLine()));
+		if(!hasExpr() && !proc().hasType())
+			s.addError( new TypeError("return without expression from function with type", beginLine()));
+		if(hasExpr() && getExpr().type() != proc().type())
+			s.addError( new TypeError("return with "+ getExpr().type()+" expression from function with "+proc.type()+" type.", beginLine()));
+	}
+	
+	public String Procedure.type() {
+		if(hasType())
+			return getType().getTYPE();
+		return null;
 	}
 	
 	public String IdUse.type() {
@@ -65,7 +81,6 @@ aspect TypeAnalysis {
 	public static String ASTNode.INTEGER = new String("integer").intern();
 	public static String ASTNode.BOOL = new String("bool").intern();
 	public String FuncCall.type() { return decl().type(); }
-	public String Procedure.type() { return getType().getTYPE(); }
 	public String Numeral.type() { return INTEGER; }
 	public String Bool.type() { return BOOL; }
 	public String Add.type() { return INTEGER; }

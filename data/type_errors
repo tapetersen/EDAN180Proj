@@ -1,0 +1,21 @@
+procedure main(integer n)
+begin
+	integer sum = false; :P wrong type
+	bool k = 1;
+	
+	integer x;
+	x = true;
+	
+	bool y;
+	y = 1;
+	
+	procedure a() begin return 1; end;
+	procedure integer b() begin return; end;
+	procedure integer c() begin return false; end;
+
+	procedure d(integer x) begin end;
+	d();
+	d(true);
+	d(1, 1);
+
+end;
