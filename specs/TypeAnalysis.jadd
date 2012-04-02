@@ -91,11 +91,11 @@ aspect TypeAnalysis {
 	public String And.argtype() { return BOOL; }
 	public String Or.argtype() { return BOOL; }
 	public String Not.argtype() { return BOOL; }
-	public String Lt.argtype() { return BOOL; }
-	public String Lte.argtype() { return BOOL; }
-	public String Gt.argtype() { return BOOL; }
-	public String Gte.argtype() { return BOOL; }
-	public String Eq.argtype() { return BOOL; }
-	public String Neq.argtype() { return BOOL; }
+	public String Lt.argtype() { return INTEGER; }
+	public String Lte.argtype() { return INTEGER; }
+	public String Gt.argtype() { return INTEGER; }
+	public String Gte.argtype() { return INTEGER; }
+	public String Eq.argtype() { return INTEGER; }
+	public String Neq.argtype() { return INTEGER; }
 	
 }

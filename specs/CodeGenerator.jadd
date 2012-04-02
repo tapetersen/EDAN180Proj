@@ -124,10 +124,7 @@ aspect CodeGenerator {
 	}
 	
 	public void ExprStmt.genCode(Code code, TempFactory tempFactory, Procedure proc) {
-		code.addInstruction( new Move(
-			getExpr().genExpr(code, tempFactory, proc.blockLevel()),
-			tempFactory.create()
-		));
+		getExpr().genExpr(code, tempFactory, proc.blockLevel());
 	}
 	
 	public void ForStmt.genCode(Code code, TempFactory tempFactory, Procedure proc) {
@@ -228,7 +225,8 @@ aspect CodeGenerator {
 	public Operand FuncCall.genExpr(Code code, TempFactory tempFactory, int blockLevel) {
 		
 		// Alloc params
-		code.addInstruction(new Alloc(getNumArg()));
+		if(getNumArg() > 0)
+			code.addInstruction(new Alloc(getNumArg()));
 		
 		// set params
 		for(int i=0;  i<getNumArg(); i++) {
@@ -241,7 +239,9 @@ aspect CodeGenerator {
 		code.addInstruction(new Call(decl().label(), blockLevel));
 		
 		// clean args
-		code.addInstruction(new Dealloc(decl().getNumParam()));
+		if(getNumArg() > 0)
+			code.addInstruction(new Dealloc(decl().getNumParam()));
+			
 		return new Result();
 	}
 	
