@@ -62,10 +62,10 @@
         <javac srcdir="src" destdir="bin" classpath="${lib}/junit.jar" />
     </target>
 
-    <target name="test" depends="build" description="Run all tests.">
+    <target name="test_codegen" depends="build" description="Run codegen tests.">
         <java classname="org.junit.runner.JUnitCore"
               classpath="bin:${lib}/junit.jar">
-            <arg value="test.ICodeTests" />
+            <arg value="test.TestCodeGen" />
         </java>
     </target>
 

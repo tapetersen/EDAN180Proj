@@ -14,17 +14,37 @@ import semantic.Semantic;
 public class TestCodeGen extends TestCaseOutput {
 	private final static String DATA = "data/";
 	private final static String RESULT = "result/";
-	private final static String RESULT_EXTENSION = ".res";
+	private final static String RESULT_EXTENSION = ".code";
 
 	private void assertCorrectOutput(String testName) {
 		String fullName = testName;
 		genCode(DATA + fullName);
 		assertOutput(new File(RESULT + fullName + RESULT_EXTENSION));
 	}
-
+	
 	@Test
-	public void empty() {
-		assertCorrectOutput("empty");
+	public void type_errors() {
+		assertCorrectOutput("type_errors");
+	}
+	
+	@Test
+	public void printRec() {
+		assertCorrectOutput("printRec");
+	}
+	
+	@Test
+	public void codeexample() {
+		assertCorrectOutput("codeexample");
+	}
+	
+	@Test
+	public void printNested() {
+		assertCorrectOutput("printNested");
+	}
+	
+	@Test
+	public void printTwoNested() {
+		assertCorrectOutput("printTwoNested");
 	}
 
 	private static void genCode(String arg) {

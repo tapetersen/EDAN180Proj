@@ -52,7 +52,7 @@ aspect TypeAnalysis {
 	public void Ret.typeAnalysis(Semantic s) {
 		if(!hasExpr() && proc().hasType())
 			s.addError( new TypeError("return with expression from function without type", beginLine()));
-		if(!hasExpr() && !proc().hasType())
+		if(hasExpr() && !proc().hasType())
 			s.addError( new TypeError("return without expression from function with type", beginLine()));
 		if(hasExpr() && getExpr().type() != proc().type())
 			s.addError( new TypeError("return with "+ getExpr().type()+" expression from function with "+proc.type()+" type.", beginLine()));

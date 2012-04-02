@@ -1,0 +1,60 @@
+main:                                                           
+        ENTER   vars(6)         temps(21)                       
+        MOV     0               var(0,0)                        
+        MOV     var(0,0)        var(0,1)                        
+        MOV     var(0,1)        var(0,2)                        
+        MOV     null            var(0,3)                        
+        MOV     null            var(0,4)                        
+        MOV     null            var(0,5)                        
+        INTADD  var(0,1)        var(0,2)        #0              
+        MOV     #0              var(0,0)                        
+        INTSUB  var(0,0)        var(0,2)        #1              
+        MOV     #1              var(0,1)                        
+        INTMUL  var(0,0)        var(0,1)        #2              
+        MOV     #2              var(0,2)                        
+        INTDIV  var(0,0)        var(0,2)        #3              
+        MOV     #3              var(0,1)                        
+        INTLT   var(0,0)        var(0,1)        #4              
+        MOV     #4              var(0,3)                        
+        INTGT   var(0,0)        var(0,1)        #5              
+        MOV     #5              var(0,3)                        
+        INTLE   var(0,0)        var(0,1)        #6              
+        MOV     #6              var(0,3)                        
+        INTGE   var(0,0)        var(0,1)        #7              
+        MOV     #7              var(0,3)                        
+        INTEQ   var(0,0)        var(0,1)        #8              
+        MOV     #8              var(0,3)                        
+        INTNE   var(0,0)        var(0,1)        #9              
+        MOV     #9              var(0,3)                        
+        INTLT   var(0,0)        var(0,2)        #11             
+        INTEQ   var(0,0)        var(0,1)        #12             
+        OR      #11             #12             #10             
+        MOV     #10             var(0,3)                        
+        OR      var(0,5)        var(0,4)        #13             
+        MOV     #13             var(0,3)                        
+        AND     var(0,3)        var(0,3)        #14             
+        MOV     #14             var(0,3)                        
+        NOT     var(0,3)        #15                             
+        MOV     #15             var(0,3)                        
+        INTLT   var(0,0)        var(0,1)        #16             
+        JMPT    #16             if_0                            
+        JMP     fi_0                                            
+if_0:                                                           
+        INTADD  var(0,0)        1               #17             
+        MOV     #17             var(0,2)                        
+        JMP     fi_0                                            
+fi_0:                                                           
+        INTGT   var(0,0)        var(0,1)        #18             
+        JMPT    #18             if_1                            
+        JMP     else_1                                          
+if_1:                                                           
+        INTADD  var(0,1)        2               #19             
+        MOV     #19             var(0,0)                        
+        JMP     fi_1                                            
+else_1:                                                         
+        INTSUB  var(0,1)        2               #20             
+        MOV     #20             var(0,0)                        
+        JMP     fi_1                                            
+fi_1:                                                           
+        RETURN                                                  
+
