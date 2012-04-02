@@ -1,0 +1,11 @@
+procedure printNested() 
+begin
+	integer x;
+	procedure innerProc()
+	begin
+		writeint(x);
+	end;
+	x = 1;
+	innerProc();
+	procedure writeint(integer n)begin end; :P Dummy definition
+end;
