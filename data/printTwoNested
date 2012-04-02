@@ -1,0 +1,15 @@
+procedure printTwoNested() 
+begin
+	integer x;
+	procedure pone()
+	begin
+		ptwo();
+	end;
+	procedure ptwo()
+	begin
+		writeint(x);
+	end;
+	x = 1;
+	pone();
+	procedure writeint(integer n)begin end; :P Dummy definition
+end;
