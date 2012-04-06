@@ -73,6 +73,35 @@ aspect NameAnalysis {
 			s.addError(new NameError("Id: "+getId().getID()+" not declared.", beginLine()));
 	}
 	
+	public void IfStmt.nameAnalysis(Semantic s) {
+	
+		// Condition analysed in outer scope
+		getExpr().nameAnalysis(s);
+		
+		// If part new scope
+		s.enterBlock();
+		for(Stmt t : getIfParts())
+			t.nameAnalysis(s);
+		s.exitBlock();
+		
+		// else part separate scope
+		s.enterBlock();
+		for(Stmt t : getElseParts())
+			t.nameAnalysis(s);
+		s.exitBlock();
+	}
+	
+	public void ForStmt.nameAnalysis(Semantic s) {
+	
+		// Everything should be in new scope
+		s.enterBlock();
+		getInit().nameAnalysis(s);
+		getCheck().nameAnalysis(s);
+		for(Stmt t : getBodys())
+			t.nameAnalysis(s);
+		s.exitBlock();
+	}
+	
 	private int Procedure.blockLevel = Integer.MIN_VALUE;
 	public int Procedure.blockLevel() { return blockLevel; }
 	public void Procedure.nameAnalysis(Semantic s) {

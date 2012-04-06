@@ -69,7 +69,7 @@ public class Semantic {
 		return procTab.lookup(id);
 	}
 	
-	public void enterBlock(Procedure p) {
+	public void enterBlock() {
 		symTab.enterBlock();
 	}
 	
