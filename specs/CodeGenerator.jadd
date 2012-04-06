@@ -2,8 +2,9 @@ import icode.*;
 import util.*;
 import java.util.ArrayList;
 aspect CodeGenerator {
+
 	public void Start.genCode(Code code, Semantic s) {
-		for(Procedure p : s.getProcedures()) {
+		for(Procedure p : s.procedures()) {
 			p.genCode(code, new TempFactory());
 		}
 	}
@@ -49,11 +50,11 @@ aspect CodeGenerator {
 	
 	public int IdDecl.varNum = -1;
 	public Address IdDecl.genAddress(int blockLevel) {
-		return new Variable(blockLevel-declLevel, varNum);
+		return new Variable(blockLevel-this.blockLevel, varNum);
 	}
 	
 	public Address Param.genAddress(int blockLevel) {
-		return new Parameter(blockLevel-declLevel, varNum);
+		return new Parameter(blockLevel-this.blockLevel, varNum);
 	}
 		
 	public void IdDecl.genCode(Code code, TempFactory tempFactory, Procedure proc) {

@@ -1,6 +1,7 @@
 package semanticlib;
-import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 import semantic.NameError;
 
@@ -42,7 +43,7 @@ public class SymbolTable<K, V> {
      * calls that add or look up symbols.
      */
     public void enterBlock() {
-        top = new StackedMap(top); // push a new element on top of the stack
+        top = new StackedMap<K, V>(top); // push a new element on top of the stack
         n++;
     }
 
@@ -75,12 +76,14 @@ public class SymbolTable<K, V> {
         return n;
     }
     
-    public Collection<V> getLocalSymbols() {
-    	return top.values();
+    public Iterator<V> localValuesIterator() {
+    	return top.values().iterator();
     }
     
     private static class StackedMap<K, V> extends HashMap<K, V> {
-        private StackedMap<K, V> next;
+
+		private static final long serialVersionUID = 1L;
+		private StackedMap<K, V> next;
 
         private StackedMap(StackedMap<K, V> next) {
             this.next = next;

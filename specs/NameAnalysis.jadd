@@ -1,39 +1,34 @@
-import semanticlib.SymbolTable;
 import semantic.*;
 
 aspect NameAnalysis {
 	
 	public void Start.nameAnalysis(Semantic s) {
-		SymbolTable<String, IdDecl> table = new SymbolTable<String, IdDecl>();
-		table.enterBlock();
-		nameAnalysis(table, s);
-		table.exitBlock(); // pedantic
-		
-		
-		SymbolTable<String, Procedure> procTable = new SymbolTable<String, Procedure>();
-		
-		// gather toplevel procedures
-		procTable.enterBlock();
-		gatherProcedures(procTable, s);
-		procAnalysis(procTable, s);
-		procTable.exitBlock();
+		gatherProcedures(s);
+		super.nameAnalysis(s);
 	}
 	
-	void ASTNode.nameAnalysis(SymbolTable<String, IdDecl> table, Semantic s) {
+	void ASTNode.nameAnalysis(Semantic s) {
 		for (int k=0; k<getNumChild(); k++) {
-			getChild(k).nameAnalysis(table, s);
+			getChild(k).nameAnalysis(s);
 		}
 	}
 	
-	protected int IdDecl.declLevel = -1;
-	void IdDecl.nameAnalysis(SymbolTable<String, IdDecl> table, Semantic s) {
-		super.nameAnalysis(table, s);
-		declLevel = table.blockLevel();
-		try {
-			table.add(getId().getID(), this);
-		} catch(Exception e) {
-			s.addError(new NameError(e.getMessage(), beginLine()));
-		}
+	protected int IdDecl.blockLevel = Integer.MIN_VALUE;
+	/**
+	 * Returns the procedural blockLevel. return of MIN_VALUE indicates bugs or that NameAnalysis wasn't run
+	 */
+	public int IdDecl.blockLevel() {
+		return blockLevel;
+	}
+	
+	void IdDecl.nameAnalysis(Semantic s) {
+	
+		// handle initializer without this binding;
+		if(hasExpr())
+			getExpr().nameAnalysis(s);
+		
+		blockLevel = s.blockLevel();
+		s.addSymbol(this);
 	}
 	
 	private String IdDecl.id = null;
@@ -59,12 +54,7 @@ aspect NameAnalysis {
 	public IdDecl IdUse.decl() {
 		return declNode;
 	}
-	
-	private int IdDecl.blocklevel;
-	public int IdDecl.blocklevel() {
-		return blocklevel;
-	}
-	
+
 	private Procedure Ret.proc = null;
 	public Procedure Ret.proc() {
 		return proc;
@@ -77,69 +67,53 @@ aspect NameAnalysis {
 		return id();
 	}
 	
-	public void IdUse.nameAnalysis(SymbolTable<String, IdDecl> table, Semantic s) {
-		declNode = table.lookup(getId().getID());
+	public void IdUse.nameAnalysis(Semantic s) {
+		declNode = s.lookupSym(getId().getID());
 		if(declNode == null)
 			s.addError(new NameError("Id: "+getId().getID()+" not declared.", beginLine()));
 	}
 	
-	private int Procedure.blockLevel = -1;
+	private int Procedure.blockLevel = Integer.MIN_VALUE;
 	public int Procedure.blockLevel() { return blockLevel; }
-	public void Procedure.nameAnalysis(SymbolTable<String, IdDecl> table, Semantic s) {
-		table.enterBlock();
-		blockLevel = table.blockLevel();
-		super.nameAnalysis(table, s);
-		table.exitBlock();
-	}
-	
-	public void ASTNode.procAnalysis(SymbolTable<String, Procedure> table, Semantic s) {
-		for (int k=0; k<getNumChild(); k++) {
-			getChild(k).procAnalysis(table, s);
+	public void Procedure.nameAnalysis(Semantic s) {
+		parentProc = s.currentProcedure();
+		s.enterProcedure(this);
+		blockLevel = s.blockLevel();
+		
+		// gather the local procedures before analysis
+		for (int k=0; k<getNumStmt(); k++) {
+			getStmt(k).gatherProcedures(s);
 		}
+		
+		super.nameAnalysis(s);
+		s.exitProcedure();
 	}
 		
-	public void Ret.procAnalysis(SymbolTable<String, Procedure> table, Semantic s) {
+	public void Ret.nameAnalysis(Semantic s) {
 		proc = s.currentProcedure();
 	}
 	
-	public void Procedure.procAnalysis(SymbolTable<String, Procedure> table, Semantic s) {
-	
-		parentProc = s.currentProcedure();
-		s.enterProcedure(this);
-		// procedure should already be in table
-		table.enterBlock();
-		
-		// gather the local procedures before analysis
-		for (int k=0; k<getNumChild(); k++) {
-			getChild(k).gatherProcedures(table, s);
-		}
-		
-		// recurse
-		for (int k=0; k<getNumChild(); k++) {
-			getChild(k).procAnalysis(table, s);
-		}
-		
-		table.exitBlock();
-		s.exitProcedure();
-	}
-	
-	public void FuncCall.procAnalysis(SymbolTable<String, Procedure> table, Semantic s) {
+	public void FuncCall.nameAnalysis(Semantic s) {
 		String id = getId().getID();
-		declNode = table.lookup(id);
+		declNode = s.lookupProc(id);
 		if(declNode == null)
 			s.addError(new NameError("Function: "+id+" not declared.", beginLine()));
+			
+		for(int i=0; i<getNumArg(); i++)
+			getArg(i).nameAnalysis(s);
+			
 	}
 	
-	public void ASTNode.gatherProcedures(SymbolTable<String, Procedure> table, Semantic s) {
+	public void ASTNode.gatherProcedures(Semantic s) {
 		for (int k=0; k<getNumChild(); k++) {
-			getChild(k).gatherProcedures(table, s);
+			getChild(k).gatherProcedures(s);
 		}
 	}
 	
-	public void Procedure.gatherProcedures(SymbolTable<String, Procedure> table, Semantic s) {
+	public void Procedure.gatherProcedures(Semantic s) {
 		// just add the procedure for binding, don't recurse
 		try {
-			table.add(id(), this);
+			s.addProcedure(this);
 		} catch (Exception e) {
 			s.addError(new NameError(e.getMessage(), beginLine()));
 		}
