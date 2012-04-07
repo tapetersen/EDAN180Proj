@@ -9,11 +9,14 @@ aspect RetAnalysis {
 				return;
 			}
 		}
-		if(type() != SemType.NONE && !getStmt(getNumStmt()-1).returns(s))
+		if(type() != SemType.NONE && (getNumStmt() == 0 || !getStmt(getNumStmt()-1).returns(s)))
 			s.addError(new MiniTError("No return from function with type.", beginLine()));
 	}
 	
-	public boolean Stmt.returns(Semantic s) {return false;}
+	public  boolean Stmt.returns(Semantic s) {
+		return false;
+	}
+	
 	public boolean Ret.returns(Semantic s) {
 		return true; // Always returns duh!
 	}
@@ -40,11 +43,28 @@ aspect RetAnalysis {
 				if(i<getNumElsePart()-1)
 					s.addError(new MiniTError("Dead code after this line.", getElsePart(i).beginLine()));
 					
-				ifReturns = true;
+				elseReturns = true;
 			}
 		}
 		
 		// if at least one passes we may pass this Stmt
 		return ifReturns && elseReturns;
+	}
+	
+	public boolean ForStmt.returns(Semantic s) {
+	
+		// regard this as an error since there is no good reason to do it ever
+		if(getInit().returns(s)) {
+			s.addError(new MiniTError("Return in for loop initializer. Stop being silly", getInit().beginLine()));
+			return true;
+		}
+		
+		for(int i=0; i<getNumBody(); i++) {
+			if(getBody(i).returns(s) && i<getNumBody()-1) {
+				s.addError(new MiniTError("Dead code after this line.", getBody(i).beginLine()));
+			}
+		}
+		// Always return false since we may skip the loop entirely
+		return false;
 	}
 }
