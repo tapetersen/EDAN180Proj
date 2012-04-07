@@ -1,0 +1,9 @@
+procedure ifLive() 
+begin
+	if true then
+		1 + 1;
+	else
+		return;
+	fi;
+	integer x;
+end;

@@ -1,0 +1,5 @@
+procedure simpleDead() 
+begin
+	return;
+	integer x;
+end;

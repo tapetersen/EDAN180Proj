@@ -1,0 +1,4 @@
+procedure forRet() 
+begin
+	for return until true do od;
+end;
