@@ -1,0 +1,50 @@
+import semantic.*;
+
+aspect RetAnalysis {
+
+	public void Procedure.retAnalysis(Semantic s) {
+		for(int i=0; i<getNumStmt(); i++) {
+			if(getStmt(i).returns(s) && i<getNumStmt()-1) {
+				s.addError(new MiniTError("Dead code after this line.", getStmt(i).beginLine()));
+				return;
+			}
+		}
+		if(type() != SemType.NONE && !getStmt(getNumStmt()-1).returns(s))
+			s.addError(new MiniTError("No return from function with type.", beginLine()));
+	}
+	
+	public boolean Stmt.returns(Semantic s) {return false;}
+	public boolean Ret.returns(Semantic s) {
+		return true; // Always returns duh!
+	}
+	
+	public boolean IfStmt.returns(Semantic s) {
+	
+		// check if if part returns
+		boolean ifReturns = false;
+		for(int i=0; i<getNumIfPart(); i++) {
+			if(getIfPart(i).returns(s)) {
+				// check for dead code
+				if(i<getNumIfPart()-1)
+					s.addError(new MiniTError("Dead code after this line.", getIfPart(i).beginLine()));
+					
+				ifReturns = true;
+			}
+		}
+		
+		// check if else part returns
+		boolean elseReturns = false;
+		for(int i=0; i<getNumElsePart(); i++) {
+			if(getElsePart(i).returns(s)) {
+				// check for dead code
+				if(i<getNumElsePart()-1)
+					s.addError(new MiniTError("Dead code after this line.", getElsePart(i).beginLine()));
+					
+				ifReturns = true;
+			}
+		}
+		
+		// if at least one passes we may pass this Stmt
+		return ifReturns && elseReturns;
+	}
+}
