@@ -11,7 +11,6 @@ import java.util.TreeMap;
 
 import parser.IdDecl;
 import parser.Procedure;
-import semanticlib.SymbolTable;
 
 public class Semantic {
 

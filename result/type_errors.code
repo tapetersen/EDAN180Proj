@@ -3,7 +3,7 @@ errors found
 4: Error: semantic.TypeError: var: k has type: bool found: integer
 7: Error: semantic.TypeError: var: x has type: integer found: bool
 10: Error: semantic.TypeError: var: y has type: bool found: integer
-12: Error: semantic.TypeError: return with integer expression from function with null type.
+12: Error: semantic.TypeError: return with integer expression from function with none type.
 13: Error: semantic.TypeError: return with expression from function without type
 14: Error: semantic.TypeError: return with bool expression from function with integer type.
 17: Error: semantic.TypeError: Procedure called with wrong number of params.

@@ -1,9 +1,8 @@
-package semanticlib;
+package semantic;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-import semantic.NameError;
 
 /**
  * Maintains a stack of dictionaries for block-structured symbol handling.

@@ -58,59 +58,59 @@ aspect TypeAnalysis {
 			s.addError( new TypeError("return with "+ getExpr().type()+" expression from function with "+proc.type()+" type.", beginLine()));
 	}
 	
-	public String Procedure.type() {
+	private SemType Procedure.type = null;
+	public SemType Procedure.type() {
 		if(hasType())
-			return getType().getTYPE();
-		return null;
+			return SemType.fromString(getType().getTYPE());
+		return SemType.NONE;
 	}
 	
-	public String IdUse.type() {
+	public SemType IdUse.type() {
 		return decl().type();
 	}
 	
-	public abstract String Expr.type();
-	public abstract String BinExpr.argtype();
-	public abstract String UnExpr.argtype();
+	public abstract SemType Expr.type();
+	public abstract SemType BinExpr.argtype();
+	public abstract SemType UnExpr.argtype();
 
-	private String IdDecl.type = null;	
-	public String IdDecl.type() {
+	private SemType IdDecl.type = null;	
+	public SemType IdDecl.type() {
 		if(type == null)
-			type = getType().getTYPE(); 
+			type = SemType.fromString(getType().getTYPE()); 
 		return type;
 	}
-	public static String ASTNode.INTEGER = new String("integer").intern();
-	public static String ASTNode.BOOL = new String("bool").intern();
-	public String FuncCall.type() { return decl().type(); }
-	public String Numeral.type() { return INTEGER; }
-	public String Bool.type() { return BOOL; }
-	public String Add.type() { return INTEGER; }
-	public String Sub.type() { return INTEGER; }
-	public String Div.type() { return INTEGER; }
-	public String Mul.type() { return INTEGER; }
-	public String Neg.type() { return INTEGER; }
-	public String And.type() { return BOOL; }
-	public String Or.type() { return BOOL; }
-	public String Not.type() { return BOOL; }
-	public String Lt.type() { return BOOL; }
-	public String Lte.type() { return BOOL; }
-	public String Gt.type() { return BOOL; }
-	public String Gte.type() { return BOOL; }
-	public String Eq.type() { return BOOL; }
-	public String Neq.type() { return BOOL; }
 	
-	public String Add.argtype() { return INTEGER; }
-	public String Sub.argtype() { return INTEGER; }
-	public String Div.argtype() { return INTEGER; }
-	public String Mul.argtype() { return INTEGER; }
-	public String Neg.argtype() { return INTEGER; }
-	public String And.argtype() { return BOOL; }
-	public String Or.argtype() { return BOOL; }
-	public String Not.argtype() { return BOOL; }
-	public String Lt.argtype() { return INTEGER; }
-	public String Lte.argtype() { return INTEGER; }
-	public String Gt.argtype() { return INTEGER; }
-	public String Gte.argtype() { return INTEGER; }
-	public String Eq.argtype() { return INTEGER; }
-	public String Neq.argtype() { return INTEGER; }
+	public SemType FuncCall.type() { return decl().type(); }
+	public SemType Numeral.type() { return SemType.INTEGER; }
+	public SemType Bool.type() { return SemType.BOOL; }
+	public SemType Add.type() { return SemType.INTEGER; }
+	public SemType Sub.type() { return SemType.INTEGER; }
+	public SemType Div.type() { return SemType.INTEGER; }
+	public SemType Mul.type() { return SemType.INTEGER; }
+	public SemType Neg.type() { return SemType.INTEGER; }
+	public SemType And.type() { return SemType.BOOL; }
+	public SemType Or.type() { return SemType.BOOL; }
+	public SemType Not.type() { return SemType.BOOL; }
+	public SemType Lt.type() { return SemType.BOOL; }
+	public SemType Lte.type() { return SemType.BOOL; }
+	public SemType Gt.type() { return SemType.BOOL; }
+	public SemType Gte.type() { return SemType.BOOL; }
+	public SemType Eq.type() { return SemType.BOOL; }
+	public SemType Neq.type() { return SemType.BOOL; }
+	
+	public SemType Add.argtype() { return SemType.INTEGER; }
+	public SemType Sub.argtype() { return SemType.INTEGER; }
+	public SemType Div.argtype() { return SemType.INTEGER; }
+	public SemType Mul.argtype() { return SemType.INTEGER; }
+	public SemType Neg.argtype() { return SemType.INTEGER; }
+	public SemType And.argtype() { return SemType.BOOL; }
+	public SemType Or.argtype() { return SemType.BOOL; }
+	public SemType Not.argtype() { return SemType.BOOL; }
+	public SemType Lt.argtype() { return SemType.INTEGER; }
+	public SemType Lte.argtype() { return SemType.INTEGER; }
+	public SemType Gt.argtype() { return SemType.INTEGER; }
+	public SemType Gte.argtype() { return SemType.INTEGER; }
+	public SemType Eq.argtype() { return SemType.INTEGER; }
+	public SemType Neq.argtype() { return SemType.INTEGER; }
 	
 }
