@@ -38,6 +38,10 @@ aspect TypeAnalysis {
 		super.typeAnalysis(s);
 	}
 	
+	public void Procedure.typeAnalysis(Semantic s) {
+		retAnalysis(s);
+		super.typeAnalysis(s);
+	}
 	public void FuncCall.typeAnalysis(Semantic s) {
 		if(getNumArg() != decl().getNumParam()) {
 			s.addError( new TypeError(""+decl()+" called with wrong number of params.", beginLine()));
@@ -50,6 +54,7 @@ aspect TypeAnalysis {
 	}
 	
 	public void Ret.typeAnalysis(Semantic s) {
+		// Just typecheck, other stuff handled by RetTanalysis
 		if(!hasExpr() && proc().hasType())
 			s.addError( new TypeError("return with expression from function without type", beginLine()));
 		if(hasExpr() && !proc().hasType())
