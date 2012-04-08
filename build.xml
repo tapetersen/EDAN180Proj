@@ -68,6 +68,13 @@
             <arg value="test.TestCodeGen" />
         </java>
     </target>
+	
+    <target name="test_semantic" depends="build" description="Run semantic tests.">
+        <java classname="org.junit.runner.JUnitCore"
+              classpath="bin:${lib}/junit.jar">
+            <arg value="test.TestSemantic" />
+        </java>
+    </target>
 
     <target name="doc"
             depends="build"
@@ -98,10 +105,10 @@
                defaultvalue="example" />
         <java classpath="bin"
               classname="${semantic.program}"
-              output="${target.name}.sem">
+              output="${target.name}.sdump">
             <arg value="data/${target.name}" />
         </java>
-        <echo>${target.name}.sem created using ${semantic.program}</echo>
+        <echo>${target.name}.sdump created using ${semantic.program}</echo>
     </target>
 	
 	<target name="generate_code"

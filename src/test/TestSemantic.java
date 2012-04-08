@@ -14,7 +14,7 @@ import semantic.Semantic;
 public class TestSemantic extends TestCaseOutput {
     private final static String DATA = "data/";
     private final static String RESULT = "result/";
-    private final static String RESULT_EXTENSION = ".res";
+    private final static String RESULT_EXTENSION = ".sdump";
 
     private void assertCorrectOutput(String testName) {
         String fullName = testName;
@@ -23,23 +23,33 @@ public class TestSemantic extends TestCaseOutput {
     }
 
     @Test
-    public void example() {
-        assertCorrectOutput("example");
+    public void if_dead() {
+        assertCorrectOutput("if_dead");
     }
 
     @Test
-    public void example1() {
-        assertCorrectOutput("example1");
+    public void for_dead() {
+        assertCorrectOutput("for_dead");
     }
 
     @Test
-    public void example2() {
-        assertCorrectOutput("example2");
+    public void for_ret() {
+        assertCorrectOutput("for_ret");
     }
 
     @Test
-    public void example3() {
-        assertCorrectOutput("example3");
+    public void if_live() {
+        assertCorrectOutput("if_live");
+    }
+    
+    @Test
+    public void simple_dead() {
+    	assertCorrectOutput("simple_dead");
+    }
+    
+    @Test
+    public void type_errors() {
+    	assertCorrectOutput("type_errors");
     }
 
     private static int analyse(String arg) {
@@ -49,15 +59,22 @@ public class TestSemantic extends TestCaseOutput {
 				Start start = parser.start();
 				Semantic s = new Semantic(); 
 				start.nameAnalysis(s);
-				s.printAnalysis();
+				if(s.numErrors()>0) {
+					s.printAnalysis();
+					return s.numErrors();
+				}
+				start.typeAnalysis(s);
+				if(s.numErrors()>0)
+					s.printAnalysis();
+				else
+					start.dumpSemantics(System.out);
 				return s.numErrors();
 			} catch (FileNotFoundException e) {
 				System.out.println("File not found");
 			} catch (parser.ParseException e) {
 				System.out.println(e);
 			}
-			return 0;
-
+			return -1;
     }
 
     public static void main(String[] args) {

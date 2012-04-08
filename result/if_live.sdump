@@ -1,0 +1,20 @@
+Start
+  Procedure: ifLive : none : (Line:1 Col:1)
+    Opt
+    Id
+    List
+    List
+      IfStmt
+        BoolConstant: true
+        List
+          ExprStmt
+            Add
+              NumeralConstant: 1
+              NumeralConstant: 1
+        List
+          Ret
+            Opt
+      IdDecl: x : integer : (Line:8 Col:9)
+        Type
+        Id
+        Opt
