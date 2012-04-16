@@ -1,0 +1,57 @@
+import util.*;
+import java.util.*;
+aspect icodeToAsm {
+
+
+    public String Code.toAsm() {
+    	StringBuilder body = new StringBuilder();
+        AsmContext context = new AsmContext();
+        for (int i=0; i<getNumInstruction(); i++) {
+            getInstruction(i).toAsm(context, body);
+        }
+        return body.toString();
+    }
+    
+    public void Instruction.toAsm(AsmContext context, StringBuilder body) {
+    	throw new UnsupportedOperationException();
+    }
+    
+    public void LabelDecl.toAsm(AsmContext context, StringBuilder body) {
+    	TabbedBuffer buf = context.newLineBuf();
+    	buf.append(getLabel().toString()+":");
+    	body.append(""+buf+"\n");
+    }
+    
+    public void Alloc.toAsm(AsmContext context, StringBuilder body) {
+    	TabbedBuffer buf = context.newLineBuf();
+    	buf.tabTo(1);
+        buf.append("subl ");
+        buf.tabTo(2);
+        buf.append("%esp, $" + getSize()*4);
+    }
+    
+    public void Dealloc.toAsm(AsmContext context, StringBuilder body) {
+    	TabbedBuffer buf = context.newLineBuf();
+    	buf.tabTo(1);
+        buf.append("addll ");
+        buf.tabTo(2);
+        buf.append("%esp, $" + getSize()*4);
+    }
+    public void Enter.toAsm(AsmContext context, StringBuilder body) {
+    	context.setNumVars(getVars());
+    	context.setNumTemps(getTemps());
+    	TabbedBuffer buf = context.newLineBuf();
+    	buf.tabTo(1);
+    	buf.append("subl ");
+    	buf.tabTo(2);
+    	buf.append("%esp, $"+context.getRecordSize());
+    }
+    public void Return.appendBody(AsmContext context, StringBuilder body) {
+    	TabbedBuffer buf = context.newLineBuf();
+    	buf.tabTo(1);
+    	buf.append("addl ");
+    	buf.tabTo(2);
+    	buf.append("%esp, $"+context.getRecordSize());
+    	body.append(""+buf+"\n");
+    }
+}
