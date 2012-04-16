@@ -1,5 +1,6 @@
 procedure main(integer n)
 begin
+	procedure print(integer n)begin end;
 	integer sum = 0;
 	integer k;
 	n = 2;

@@ -1,0 +1,9 @@
+main:                                                           
+        ENTER   vars(0)         temps(5)                        
+        AND     null            null            #2              
+        NOT     null            #3                              
+        OR      #2              #3              #1              
+        INTEQ   3               par(0,0)        #4              
+        OR      #1              #4              #0              
+        RETURN                                                  
+
