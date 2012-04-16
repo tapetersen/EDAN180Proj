@@ -6,6 +6,14 @@ aspect icodeToAsm {
     public String Code.toAsm() {
     	StringBuilder body = new StringBuilder();
         AsmContext context = new AsmContext();
+        TabbedBuffer buf = context.newLineBuf();
+        buf.tabTo(1);
+        buf.append(".text");
+        body.append(""+buf+"\n");
+        buf.clear();
+        buf.tabTo(1);
+        buf.append(".global main");
+        body.append(""+buf+"\n");
         for (int i=0; i<getNumInstruction(); i++) {
             getInstruction(i).toAsm(context, body);
         }
@@ -141,19 +149,70 @@ aspect icodeToAsm {
   		getOperand2().loadIn("%edx", context, body);
   	}
   	
+  	public void BoolOpr.toAsm(AsmContext context, StringBuilder body) {
+  		loadOperands(context, body);
+  		TabbedBuffer buf = context.newLineBuf();
+  		
+  		// compare
+  		buf.tabTo(1);
+  		buf.append("cmpl ");
+  		buf.tabTo(2);
+  		buf.append("%edx, %eax");
+  		body.append(""+buf+"\n");
+  		buf.clear();
+  		
+  		// Use setcc intruction
+  		buf.tabTo(1);
+  		buf.append(getAsmString()+" ");
+  		buf.tabTo(2);
+  		buf.append("%al");
+  		body.append(""+buf+"\n");
+  		buf.clear();
+  		
+  		// must clear upper bytes of %eax as setcc operations only operate on lowest byte
+  		buf.tabTo(1);
+  		buf.append("andl ");
+  		buf.tabTo(2);
+  		buf.append("$0xffffff00, %eax");
+  		body.append(""+buf+"\n");
+  		
+  		storeResult(context, body);
+  	}
+  	
   	public void BinOpr.toAsm(AsmContext context, StringBuilder body) {
   		loadOperands(context, body);
   		TabbedBuffer buf = context.newLineBuf();
   		buf.tabTo(1);
   		buf.append(getAsmString()+" ");
   		buf.tabTo(2);
-  		buf.append("%eax, %edx, %eax");
+  		buf.append("%edx, %eax");
   		body.append(""+buf+"\n");
   		storeResult(context, body);
   	}
   	
   	public String BinOpr.getAsmString() { throw new UnsupportedOperationException(); }
   	public String IntAdd.getAsmString() { return "addl"; }
-  	public String IntSub.getAsmString() { return "subl"; }
-  		
+  	public String IntMul.getAsmString() { return "imull"; }
+  	public String IntDiv.getAsmString() { return "idivl"; }
+  	public String IntNeg.getAsmString() { return "negl"; }
+  	public String BoolAnd.getAsmString() { return "andl"; }
+  	public String BoolOr.getAsmString() { return "orl"; }
+  	public String IntEq.getAsmString() { return "sete"; }
+  	public String IntNe.getAsmString() { return "setne"; }
+  	public String IntLt.getAsmString() { return "setl"; }
+  	public String IntLe.getAsmString() { return "setle"; }
+  	public String IntGt.getAsmString() { return "setg"; }
+  	public String IntGe.getAsmString() { return "setge"; }
+  	
+	public void BoolNot.toAsm(AsmContext context, StringBuilder body) {
+  		loadOperands(context, body);
+  		TabbedBuffer buf = context.newLineBuf();
+  		buf.tabTo(1);
+  		buf.append("xorl ");
+  		buf.tabTo(2);
+  		buf.append("$1, %eax");
+  		body.append(""+buf+"\n");
+  		storeResult(context, body);
+  	}
+  	
 }

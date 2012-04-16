@@ -37,8 +37,8 @@ IntLt: BoolOpr;
 IntLe: BoolOpr;
 IntGt: BoolOpr;
 IntGe: BoolOpr;
-BoolAnd: BoolOpr;
-BoolOr: BoolOpr;
+BoolAnd: BinOpr;
+BoolOr: BinOpr;
 BoolNot: UnOpr;
 
 Jmp: Instruction ::= <Label: String>;
