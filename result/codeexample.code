@@ -3,9 +3,9 @@ main:
         MOV     0               var(0,0)                        
         MOV     var(0,0)        var(0,1)                        
         MOV     var(0,1)        var(0,2)                        
-        MOV     null            var(0,3)                        
-        MOV     null            var(0,4)                        
-        MOV     null            var(0,5)                        
+        MOV     1               var(0,3)                        
+        MOV     1               var(0,4)                        
+        MOV     0               var(0,5)                        
         INTADD  var(0,1)        var(0,2)        #0              
         MOV     #0              var(0,0)                        
         INTSUB  var(0,0)        var(0,2)        #1              
@@ -56,5 +56,12 @@ else_1:
         MOV     #20             var(0,0)                        
         JMP     fi_1                                            
 fi_1:                                                           
+        CALL    read            levels(0)                       
+        MOV     returned        var(0,0)                        
+        ALLOC   size(1)                                         
+        MOV     var(0,0)        arg(0)                          
+        CALL    writeint        levels(0)                       
+        DEALLOC size(1)                                         
+        CALL    writeln         levels(0)                       
         RETURN                                                  
 

@@ -1,0 +1,56 @@
+main:                                                           
+        ENTER   vars(2)         temps(13)                       
+        MOV     0               var(0,0)                        
+        MOV     2               par(0,0)                        
+        MOV     1               var(0,1)                        
+loop_0:                                                         
+        INTEQ   var(0,1)        10              #0              
+        JMPT    #0              endLoop_0                       
+        INTADD  var(0,1)        1               #1              
+        MOV     #1              var(0,1)                        
+        INTMUL  var(0,1)        2               #4              
+        INTADD  var(0,0)        #4              #3              
+        INTADD  #3              1               #2              
+        MOV     #2              var(0,0)                        
+        ALLOC   size(1)                                         
+        MOV     var(0,0)        arg(0)                          
+        CALL    main.print      levels(0)                       
+        DEALLOC size(1)                                         
+        MOV     result          #5                              
+        ALLOC   size(1)                                         
+        MOV     var(0,1)        arg(0)                          
+        CALL    main.print      levels(0)                       
+        DEALLOC size(1)                                         
+        MOV     result          #6                              
+        JMP     loop_0                                          
+endLoop_0:                                                      
+        INTMUL  2               par(0,0)        #9              
+        INTADD  var(0,0)        #9              #8              
+        INTMUL  var(0,0)        2               #10             
+        INTLT   #8              #10             #7              
+        JMPT    #7              if_0                            
+        JMP     else_0                                          
+if_0:                                                           
+        ALLOC   size(1)                                         
+        MOV     var(0,0)        arg(0)                          
+        CALL    main.print      levels(0)                       
+        DEALLOC size(1)                                         
+        MOV     result          #11                             
+        JMP     fi_0                                            
+else_0:                                                         
+        ALLOC   size(1)                                         
+        MOV     0               arg(0)                          
+        CALL    main.print      levels(0)                       
+        DEALLOC size(1)                                         
+        MOV     result          #12                             
+        JMP     fi_0                                            
+fi_0:                                                           
+        RETURN                                                  
+main.print:                                                     
+        ENTER   vars(0)         temps(0)                        
+        ALLOC   size(1)                                         
+        MOV     par(0,0)        arg(0)                          
+        CALL    writeint        levels(0)                       
+        DEALLOC size(1)                                         
+        RETURN                                                  
+

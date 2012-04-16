@@ -6,11 +6,8 @@ printByRecursion:
         DEALLOC size(1)                                         
         MOV     result          #0                              
         RETURN                                                  
-printByRecursion.writeint:                                      
-        ENTER   vars(0)         temps(0)                        
-        RETURN                                                  
 printByRecursion.printR:                                        
-        ENTER   vars(0)         temps(4)                        
+        ENTER   vars(0)         temps(3)                        
         INTEQ   par(0,0)        0               #0              
         JMPT    #0              if_0                            
         JMP     fi_0                                            
@@ -20,14 +17,13 @@ if_0:
 fi_0:                                                           
         ALLOC   size(1)                                         
         MOV     par(0,0)        arg(0)                          
-        CALL    printByRecursion.writeintlevels(1)              
+        CALL    writeint        levels(0)                       
         DEALLOC size(1)                                         
-        MOV     result          #1                              
         ALLOC   size(1)                                         
-        INTSUB  par(0,0)        1               #2              
-        MOV     #2              arg(0)                          
+        INTSUB  par(0,0)        1               #1              
+        MOV     #1              arg(0)                          
         CALL    printByRecursion.printRlevels(1)                
         DEALLOC size(1)                                         
-        MOV     result          #3                              
+        MOV     result          #2                              
         RETURN                                                  
 

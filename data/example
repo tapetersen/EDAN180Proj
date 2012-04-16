@@ -1,6 +1,6 @@
 procedure main(integer n)
 begin
-	procedure print(integer n)begin end;
+	procedure print(integer n)begin writeint n; end;
 	integer sum = 0;
 	integer k;
 	n = 2;

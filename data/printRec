@@ -1,12 +1,11 @@
 procedure printByRecursion() 
 begin
-	procedure writeint(integer n)begin end;
 	procedure printR(integer n)
 	begin
 		if n == 0 then
 			return;
 		fi;
-		writeint(n);
+		writeint n;
 		printR(n-1);
 	end;
 	printR(5);

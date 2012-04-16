@@ -5,14 +5,10 @@ printNested:
         MOV     result          #0                              
         RETURN                                                  
 printNested.innerProc:                                          
-        ENTER   vars(0)         temps(1)                        
+        ENTER   vars(0)         temps(0)                        
         ALLOC   size(1)                                         
         MOV     var(1,0)        arg(0)                          
-        CALL    printNested.writeintlevels(1)                   
+        CALL    writeint        levels(0)                       
         DEALLOC size(1)                                         
-        MOV     result          #0                              
-        RETURN                                                  
-printNested.writeint:                                           
-        ENTER   vars(0)         temps(0)                        
         RETURN                                                  
 
