@@ -168,6 +168,10 @@ aspect CodeGenerator {
 		return new IntConst(getNUMERAL());
 	}
 	
+	public Operand Bool.genExpr(Code code, TempFactory tempFactory, int blockLevel) {
+		return new IntConst(getBOOL() ? "1" : "0");
+	}
+	
 	public Operand Add.genExpr(Code code, TempFactory tempFactory, int blockLevel) {
 		Address res = tempFactory.create();
 		code.addInstruction(new IntAdd(
@@ -218,10 +222,6 @@ aspect CodeGenerator {
 		 ));
 		 	
 		return res;
-	}
-	
-	public Operand Bool.genExpr(Code code, TempFactory tempFactory, int blockLevel) {
-		return null;
 	}
 	
 	public Operand Eq.genExpr(Code code, TempFactory tempFactory, int blockLevel) {

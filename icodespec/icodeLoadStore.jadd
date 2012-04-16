@@ -162,11 +162,11 @@ aspect icodeLoadStore {
   	}
   	
   	public void Result.store(AsmContext context, StringBuilder body) {
-  		// should already be in %eax
+  		// shouldn't be stored, maybe should be error but it may be easier to leave as is
     }
     
   	public void Returned.store(AsmContext context, StringBuilder body) {
-  		// should already be in %eax
+  	  	// shouldn't be stored, maybe should be error but it may be easier to leave as is
     }
     
     public void Temp.store(AsmContext context, StringBuilder body) {
