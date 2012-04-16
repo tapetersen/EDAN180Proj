@@ -42,7 +42,7 @@ aspect icodeLoadStore {
   			buf.tabTo(1);
   			buf.append("movl ");
   			buf.tabTo(2);
-  			buf.append("-4(%ebx), %ebx");
+  			buf.append(""+context.getStatLinkOffset()+"(%ebx), %ebx");
   			body.append(""+buf+"\n");
   		}
   	}

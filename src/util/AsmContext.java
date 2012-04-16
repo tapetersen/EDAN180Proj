@@ -9,7 +9,10 @@ public class AsmContext {
 
 	
 	private final static int varSize = 4;
-	private final static int implicitVars = 2;
+	private final static int implicitVars = 2; // retaddress doesn't count
+	private final static int retOffset = varSize*-1;
+	private final static int statLinkOffset = varSize*0;
+	private final static int dynLinkOffset = varSize*1;
 
 	public TabbedBuffer newLineBuf() {return new TabbedBuffer(tabs);};
 	public int getTempOffset(int number) {
@@ -54,5 +57,15 @@ public class AsmContext {
 	
 	public int getArgOffset(int number) {
 		return varSize*(number);
+	}
+	
+	public int getStatLinkOffset() {
+		return statLinkOffset;
+	}
+	public static int getRetOffset() {
+		return retOffset;
+	}
+	public static int getDynLinkOffset() {
+		return dynLinkOffset;
 	}
 }
