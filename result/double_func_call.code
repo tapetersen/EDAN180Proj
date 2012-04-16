@@ -1,0 +1,14 @@
+main:                                                           
+        ENTER   vars(0)         temps(3)                        
+        CALL    main.one        levels(2)                       
+        MOV     result          #1                              
+        CALL    main.one        levels(2)                       
+        MOV     result          #2                              
+        INTADD  #1              #2              #0              
+        RETURN                                                  
+main.one:                                                       
+        ENTER   vars(0)         temps(0)                        
+        MOV     1               result                          
+        RETURN                                                  
+        RETURN                                                  
+

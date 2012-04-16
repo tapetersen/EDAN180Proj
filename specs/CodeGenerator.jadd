@@ -243,7 +243,13 @@ aspect CodeGenerator {
 		if(getNumArg() > 0)
 			code.addInstruction(new Dealloc(decl().getNumParam()));
 			
-		return new Result();
+		/*
+		 * Store in temp since the result may be clobbered before we use it in
+		 * a case such as func() + func()
+		 */
+		Address res = tempFactory.create();
+		code.addInstruction(new Move(new Result(), res));
+		return res;
 	}
 	
 	public Operand Gt.genExpr(Code code, TempFactory tempFactory, int blockLevel) {
