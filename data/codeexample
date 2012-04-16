@@ -28,4 +28,8 @@ begin
 	else
 		x = y - 2;
 	fi;
+
+	x = readint;
+	writeint x;
+	writeln;
 end;

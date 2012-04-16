@@ -36,6 +36,9 @@ TOKEN: {
 | < ELSE: "else" >
 | < FI: "fi" >
 | < END: "end" >
+| < READINT: "readint" >
+| < WRITEINT: "writeint" >
+| < WRITELN: "writeln" >
 | < RETURN: "return" >
 }
 
@@ -111,7 +114,15 @@ void stmts() : {}
 
 void stmt() : {}
 {
-  ( procedure() | iddecl() | LOOKAHEAD(3) assignment() | LOOKAHEAD(3) expr() #ExprStmt | ifstmt() | forstmt() | retstmt() )
+  ( procedure() |
+    iddecl() |
+    LOOKAHEAD(3) assignment() |
+    LOOKAHEAD(3) expr() #ExprStmt |
+    ifstmt() |
+    forstmt() |
+    retstmt() |
+    writestmt() |
+    <WRITELN> #WriteLn )
 }
 
 void ifstmt() #IfStmt: {}
@@ -127,6 +138,11 @@ void forstmt() #ForStmt: {}
 void retstmt() #Ret: {}
 {
 	<RETURN> [ expr() ] #Opt(true) 
+}
+
+void writestmt() #WriteInt: {}
+{
+	<WRITEINT> expr()
 }
 
 void param() #Param: {} {declaration()}
@@ -194,6 +210,7 @@ void factor() : {}
   | <LPAR> expr() <RPAR> 
   | <SUB> factor() #Neg(1) 
   | <NOT> factor() #Not(1)
+  | <READINT> #Read()
   
 }
 

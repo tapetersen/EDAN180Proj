@@ -151,6 +151,19 @@ aspect CodeGenerator {
 		code.addInstruction(new Return());
 	}
 	
+	public void WriteInt.genCode(Code code, TempFactory tempFactory, Procedure proc) {
+		code.addInstruction(new Alloc(1));
+		code.addInstruction(new Move(
+			getExpr().genExpr(code, tempFactory, proc.blockLevel()+1),
+			new Argument(0)
+		));
+		code.addInstruction(new Call("writeint", 0));
+		code.addInstruction(new Dealloc(1));
+	}
+	public void WriteLn.genCode(Code code, TempFactory tempfactory, Procedure proc) {
+		code.addInstruction(new Call("writeln", 0));
+	}
+	
 	public Operand Numeral.genExpr(Code code, TempFactory tempFactory, int blockLevel) {
 		return new IntConst(getNUMERAL());
 	}
@@ -222,6 +235,11 @@ aspect CodeGenerator {
 		return res;
 	}
 	
+	public Operand Read.genExpr(Code code, TempFactory tempFactory, int blockLevel) {
+		code.addInstruction(new Call("read", 0));
+		return new Returned();
+	}
+		
 	public Operand FuncCall.genExpr(Code code, TempFactory tempFactory, int blockLevel) {
 		
 		// Alloc params

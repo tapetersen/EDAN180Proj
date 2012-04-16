@@ -87,6 +87,7 @@ aspect TypeAnalysis {
 	
 	public SemType FuncCall.type() { return decl().type(); }
 	public SemType Numeral.type() { return SemType.INTEGER; }
+	public SemType Read.type() { return SemType.INTEGER; }
 	public SemType Bool.type() { return SemType.BOOL; }
 	public SemType Add.type() { return SemType.INTEGER; }
 	public SemType Sub.type() { return SemType.INTEGER; }
