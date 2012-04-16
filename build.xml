@@ -8,6 +8,7 @@
     <property name="icode.package" value="icode" />
     <property name="parser.directory" value="src/${parser.package}" />
 	<property name="icode.program" value="test.TestCodeGen" />
+	<property name="asm.program" value="test.TestIntelGen" />
 	<property name="dumpTree.program" value="test.TestBuildTree" />
 	<property name="semantic.program" value="test.TestSemantic" />
     <property name="icode.directory" value="src/${icode.package}" />
@@ -69,6 +70,13 @@
         </java>
     </target>
 	
+    <target name="test_intel" depends="build" description="Run intel asm tests.">
+        <java classname="org.junit.runner.JUnitCore"
+              classpath="bin:${lib}/junit.jar">
+            <arg value="test.TestIntelGen" />
+        </java>
+    </target>
+	
     <target name="test_semantic" depends="build" description="Run semantic tests.">
         <java classname="org.junit.runner.JUnitCore"
               classpath="bin:${lib}/junit.jar">
@@ -123,7 +131,21 @@
 	            <arg value="data/${target.name}" />
 	        </java>
 	        <echo>${target.name}.code created using ${icode.program}</echo>
-	    </target>
+	</target>
+	
+	<target name="generate_asm"
+	            depends="build"
+	            description="Creates intel 32-bit assembler.">
+	        <input message="Target name"
+	               addproperty="target.name"
+	               defaultvalue="example" />
+	        <java classpath="bin"
+	              classname="${asm.program}"
+	              output="${target.name}.s">
+	            <arg value="data/${target.name}" />
+	        </java>
+	        <echo>${target.name}.s created using ${asm.program}</echo>
+	</target>
 
     <target name="clean" description="Delete generated files.">
         <delete dir="${parser.directory}" />
