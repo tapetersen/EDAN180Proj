@@ -37,6 +37,7 @@ aspect icodeToAsm {
         buf.tabTo(2);
         buf.append("%esp, $" + getSize()*4);
     }
+    
     public void Enter.toAsm(AsmContext context, StringBuilder body) {
     	context.setNumVars(getVars());
     	context.setNumTemps(getTemps());
@@ -47,6 +48,7 @@ aspect icodeToAsm {
     	buf.append("%esp, $"+context.getRecordSize());
     	body.append(""+buf+"\n");
     }
+    
     public void Return.toAsm(AsmContext context, StringBuilder body) {
     	TabbedBuffer buf = context.newLineBuf();
     	buf.tabTo(1);
@@ -55,4 +57,9 @@ aspect icodeToAsm {
     	buf.append("%esp, $"+context.getRecordSize());
     	body.append(""+buf+"\n");
     }
+    
+    public void Move.toAsm(AsmContext context, StringBuilder body) {
+    	getOperand().loadIn("%eax", context, body);
+    	getAddress().store(context, body);
+  	}
 }

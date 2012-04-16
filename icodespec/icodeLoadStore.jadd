@@ -1,0 +1,180 @@
+import util.*;
+import java.util.*;
+aspect icodeLoadStore {
+
+  	public abstract void Operand.loadIn(String dest, AsmContext context, StringBuilder body);
+  	public abstract void Address.store(AsmContext context, StringBuilder body);
+  	
+  	public void IntConst.loadIn(String dest, AsmContext context, StringBuilder body) {
+  		TabbedBuffer buf = context.newLineBuf();
+  		buf.tabTo(1);
+  		buf.append("movl ");
+  		buf.tabTo(2);
+  		buf.append("$"+getValue()+", "+dest);
+  		body.append(""+buf+"\n");
+  	}
+  	
+  	public void Argument.loadIn(String dest, AsmContext context, StringBuilder body) {
+  		// always local, no level
+  		TabbedBuffer buf = context.newLineBuf();
+  		buf.tabTo(1);
+  		buf.append("movl ");
+  		buf.tabTo(2);
+  		buf.append(""+context.getArgOffset(getNumber())+"(%ebx), "+dest);
+  		body.append(""+buf+"\n");
+  	}
+  	
+  	protected void Variable.followStatLinks(int levels, AsmContext context, StringBuilder body) {
+
+  		TabbedBuffer buf = context.newLineBuf();
+  	  	// save frame pointer if needed
+  		if(levels > 0) {
+  			buf.tabTo(1);
+  			buf.append("movl ");
+  			buf.tabTo(2);
+  			buf.append("%ebx, %ecx");
+  			body.append(""+buf+"\n");
+  			buf.clear();
+  		}
+  			
+  		// follow static links to get the right address
+  		for(int i = levels; i > 0; i--) {
+  			buf.tabTo(1);
+  			buf.append("movl ");
+  			buf.tabTo(2);
+  			buf.append("-4(%ebx), %ebx");
+  			body.append(""+buf+"\n");
+  		}
+  	}
+  	
+  	protected void Variable.restoreFramePointer(AsmContext context, StringBuilder body) {
+  		TabbedBuffer buf = context.newLineBuf();
+  		buf.tabTo(1);
+  		buf.append("movl ");
+  		buf.tabTo(2);
+  		buf.append("%ecx, %ebx");
+  		body.append(""+buf+"\n");
+  	}
+  	
+  	public void Variable.loadIn(String dest, AsmContext context, StringBuilder body) {
+  	
+  		TabbedBuffer buf = context.newLineBuf();
+  		if(getLevels()>0)
+  			followStatLinks(getLevels(), context, body);
+
+  		buf.tabTo(1);
+  		buf.append("movl ");
+  		buf.tabTo(2);
+  		buf.append(""+context.getVarOffset(getNumber())+"(%ebx), "+dest);
+  		body.append(""+buf+"\n");
+  		
+  		if(getLevels()>0)
+  			restoreFramePointer(context, body);
+  	}
+  	
+  	public void Parameter.loadIn(String dest, AsmContext context, StringBuilder body) {
+  	
+  		TabbedBuffer buf = context.newLineBuf();
+  		if(getLevels()>0)
+  			followStatLinks(getLevels(), context, body);
+
+  		buf.tabTo(1);
+  		buf.append("movl ");
+  		buf.tabTo(2);
+  		buf.append(""+context.getParOffset(getNumber())+"(%ebx), "+dest);
+  		body.append(""+buf+"\n");
+  		
+  		if(getLevels()>0)
+  			restoreFramePointer(context, body);
+  	}
+  	
+  	public void Result.loadIn(String dest, AsmContext context, StringBuilder body) {
+  		TabbedBuffer buf = context.newLineBuf();
+  		buf.tabTo(1);
+  		buf.append("movl ");
+  		buf.tabTo(2);
+  		buf.append("%eax, "+dest);
+  		body.append(""+buf+"\n");
+    }
+    
+  	public void Returned.loadIn(String dest, AsmContext context, StringBuilder body) {
+  	  	TabbedBuffer buf = context.newLineBuf();
+  		buf.tabTo(1);
+  		buf.append("movl ");
+  		buf.tabTo(2);
+  		buf.append("%eax, "+dest);
+  		body.append(""+buf+"\n");
+    }
+    
+    public void Temp.loadIn(String dest, AsmContext context, StringBuilder body) {
+      	TabbedBuffer buf = context.newLineBuf();
+    	buf.tabTo(1);
+  		buf.append("movl ");
+  		buf.tabTo(2);
+  		buf.append(""+context.getTempOffset(getNumber())+"(%ebx), "+dest);
+  		body.append(""+buf+"\n");
+  	}
+  	
+  	
+    public void Argument.store(AsmContext context, StringBuilder body) {
+  		// always local, no level
+  		TabbedBuffer buf = context.newLineBuf();
+  		buf.tabTo(1);
+  		buf.append("movl ");
+  		buf.tabTo(2);
+  		buf.append("%eax, "+context.getArgOffset(getNumber())+"(%ebx)");
+  		body.append(""+buf+"\n");
+  	}
+  	
+  	
+  	public void Variable.store(AsmContext context, StringBuilder body) {
+  	
+  		TabbedBuffer buf = context.newLineBuf();
+  		if(getLevels()>0)
+  			followStatLinks(getLevels(), context, body);
+
+  		buf.tabTo(1);
+  		buf.append("movl ");
+  		buf.tabTo(2);
+  		buf.append("%eax, "+context.getVarOffset(getNumber())+"(%ebx)");
+  		body.append(""+buf+"\n");
+  		
+  		if(getLevels()>0)
+  			restoreFramePointer(context, body);
+  	}
+  	
+  	public void Parameter.store(AsmContext context, StringBuilder body) {
+  	
+  		TabbedBuffer buf = context.newLineBuf();
+  		if(getLevels()>0)
+  			followStatLinks(getLevels(), context, body);
+
+  		buf.tabTo(1);
+  		buf.append("movl ");
+  		buf.tabTo(2);
+  		buf.append("%eax, "+context.getParOffset(getNumber())+"(%ebx)");
+  		body.append(""+buf+"\n");
+  		
+  		if(getLevels()>0)
+  			restoreFramePointer(context, body);
+  	}
+  	
+  	public void Result.store(AsmContext context, StringBuilder body) {
+  		// should already be in %eax
+    }
+    
+  	public void Returned.store(AsmContext context, StringBuilder body) {
+  		// should already be in %eax
+    }
+    
+    public void Temp.store(AsmContext context, StringBuilder body) {
+      	TabbedBuffer buf = context.newLineBuf();
+    	buf.tabTo(1);
+  		buf.append("movl ");
+  		buf.tabTo(2);
+  		buf.append("%eax, "+context.getTempOffset(getNumber())+"(%ebx)");
+  		body.append(""+buf+"\n");
+  	}
+    
+}
+    

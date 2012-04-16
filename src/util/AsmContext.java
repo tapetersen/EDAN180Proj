@@ -5,6 +5,7 @@ public class AsmContext {
 	private final static int[] tabs = {4, 12, 28};
 	private int numVars;
 	private int numTemps;
+	private int numArgs;
 
 	
 	private final static int varSize = 4;
@@ -37,5 +38,21 @@ public class AsmContext {
 	
 	public int getRecordSize() {
 		return varSize*(implicitVars+numVars+numTemps);
+	}
+	
+	public int getNumArgs() {
+		return numArgs;
+	}
+	
+	public void setNumArgs(int numArgs) {
+		this.numArgs = numArgs;
+	}
+	
+	public int getParOffset(int number) {
+		return -varSize*(implicitVars+numVars+numTemps+numArgs-number);
+	}
+	
+	public int getArgOffset(int number) {
+		return varSize*(number);
 	}
 }
