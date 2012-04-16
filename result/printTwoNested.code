@@ -1,19 +1,19 @@
 printTwoNested:                                                 
         ENTER   vars(1)         temps(1)                        
         MOV     1               var(0,0)                        
-        CALL    printTwoNested.ponelevels(2)                    
+        CALL    printTwoNested.ponelevels(0)                    
         MOV     result          #0                              
         RETURN                                                  
 printTwoNested.pone:                                            
         ENTER   vars(0)         temps(1)                        
-        CALL    printTwoNested.ptwolevels(3)                    
+        CALL    printTwoNested.ptwolevels(1)                    
         MOV     result          #0                              
         RETURN                                                  
 printTwoNested.ptwo:                                            
         ENTER   vars(0)         temps(1)                        
         ALLOC   size(1)                                         
         MOV     var(1,0)        arg(0)                          
-        CALL    printTwoNested.writeintlevels(3)                
+        CALL    printTwoNested.writeintlevels(1)                
         DEALLOC size(1)                                         
         MOV     result          #0                              
         RETURN                                                  

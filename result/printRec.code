@@ -2,7 +2,7 @@ printByRecursion:
         ENTER   vars(0)         temps(1)                        
         ALLOC   size(1)                                         
         MOV     5               arg(0)                          
-        CALL    printByRecursion.printRlevels(2)                
+        CALL    printByRecursion.printRlevels(0)                
         DEALLOC size(1)                                         
         MOV     result          #0                              
         RETURN                                                  
@@ -20,13 +20,13 @@ if_0:
 fi_0:                                                           
         ALLOC   size(1)                                         
         MOV     par(0,0)        arg(0)                          
-        CALL    printByRecursion.writeintlevels(3)              
+        CALL    printByRecursion.writeintlevels(1)              
         DEALLOC size(1)                                         
         MOV     result          #1                              
         ALLOC   size(1)                                         
         INTSUB  par(0,0)        1               #2              
         MOV     #2              arg(0)                          
-        CALL    printByRecursion.printRlevels(3)                
+        CALL    printByRecursion.printRlevels(1)                
         DEALLOC size(1)                                         
         MOV     result          #3                              
         RETURN                                                  

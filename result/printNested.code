@@ -1,14 +1,14 @@
 printNested:                                                    
         ENTER   vars(1)         temps(1)                        
         MOV     1               var(0,0)                        
-        CALL    printNested.innerProclevels(2)                  
+        CALL    printNested.innerProclevels(0)                  
         MOV     result          #0                              
         RETURN                                                  
 printNested.innerProc:                                          
         ENTER   vars(0)         temps(1)                        
         ALLOC   size(1)                                         
         MOV     var(1,0)        arg(0)                          
-        CALL    printNested.writeintlevels(3)                   
+        CALL    printNested.writeintlevels(1)                   
         DEALLOC size(1)                                         
         MOV     result          #0                              
         RETURN                                                  

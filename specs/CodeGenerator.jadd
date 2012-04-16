@@ -43,12 +43,11 @@ aspect CodeGenerator {
 			
 		enter.setTemps(tempFactory.getNumberOfTemps());
 		enter.setVars(numVars);
-		code.addInstruction(new Return());
 	}
 	
 	abstract public void Stmt.genCode(Code code, TempFactory tempFactory, Procedure proc);
 	
-	public int IdDecl.varNum = -1;
+	public int IdDecl.varNum = Integer.MIN_VALUE;
 	public Address IdDecl.genAddress(int blockLevel) {
 		return new Variable(blockLevel-this.blockLevel, varNum);
 	}
@@ -61,7 +60,7 @@ aspect CodeGenerator {
 		varNum = proc.addVar(this);
 		if(hasExpr())
 			code.addInstruction(new Move(
-			getExpr().genExpr(code, tempFactory, proc.blockLevel()),
+			getExpr().genExpr(code, tempFactory, proc.blockLevel()+1),
 			new Variable(0, varNum)
 		));
 	}
@@ -70,7 +69,7 @@ aspect CodeGenerator {
 		varNum = proc.addPar(this);
 		if(hasExpr())
 			code.addInstruction(new Move(
-				getExpr().genExpr(code, tempFactory, proc.blockLevel()),
+				getExpr().genExpr(code, tempFactory, proc.blockLevel()+1),
 				new Parameter(0, varNum)
 		));
 	}
@@ -78,8 +77,8 @@ aspect CodeGenerator {
 	public void Assgn.genCode(Code code, TempFactory tempFactory, Procedure proc) {
 		
 		code.addInstruction(new Move(
-			getExpr().genExpr(code, tempFactory, proc.blockLevel()),
-			getIdUse().decl().genAddress(proc.blockLevel())
+			getExpr().genExpr(code, tempFactory, proc.blockLevel()+1),
+			getIdUse().decl().genAddress(proc.blockLevel()+1)
 		));
 	}
 
@@ -95,7 +94,7 @@ aspect CodeGenerator {
 		code.ifStmts++;
 		
 		// Initial condition checking
-		Operand jmpCond = getExpr().genExpr(code, tempFactory, proc.blockLevel());
+		Operand jmpCond = getExpr().genExpr(code, tempFactory, proc.blockLevel()+1);
 		code.addInstruction(new JmpT(jmpCond, ifLabel));
 		
 		// Jump to fi or else part if it exists
@@ -125,7 +124,7 @@ aspect CodeGenerator {
 	}
 	
 	public void ExprStmt.genCode(Code code, TempFactory tempFactory, Procedure proc) {
-		getExpr().genExpr(code, tempFactory, proc.blockLevel());
+		getExpr().genExpr(code, tempFactory, proc.blockLevel()+1);
 	}
 	
 	public void ForStmt.genCode(Code code, TempFactory tempFactory, Procedure proc) {
@@ -134,7 +133,7 @@ aspect CodeGenerator {
 		code.forStmts++;
 		getStmt().genCode(code, tempFactory, proc);
 		code.addInstruction(new LabelDecl(loopLabel));
-		Operand jmpCmp = getExpr().genExpr(code, tempFactory, proc.blockLevel());
+		Operand jmpCmp = getExpr().genExpr(code, tempFactory, proc.blockLevel()+1);
 		code.addInstruction(new JmpT(jmpCmp, endLoop));
 		for (Stmt t : getBodys()) {
 			t.genCode(code, tempFactory, proc);
@@ -146,7 +145,7 @@ aspect CodeGenerator {
 	public void Ret.genCode(Code code, TempFactory tempFactory, Procedure proc) {
 		if(hasExpr())
 			code.addInstruction(new Move(
-				getExpr().genExpr(code, tempFactory, proc.blockLevel()),
+				getExpr().genExpr(code, tempFactory, proc.blockLevel()+1),
 				new Result()
 		));
 		code.addInstruction(new Return());
@@ -237,7 +236,7 @@ aspect CodeGenerator {
 			));
 		}
 		
-		code.addInstruction(new Call(decl().label(), blockLevel));
+		code.addInstruction(new Call(decl().label(), blockLevel-decl().blockLevel()));
 		
 		// clean args
 		if(getNumArg() > 0)

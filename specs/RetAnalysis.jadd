@@ -9,8 +9,12 @@ aspect RetAnalysis {
 				return;
 			}
 		}
-		if(type() != SemType.NONE && (getNumStmt() == 0 || !getStmt(getNumStmt()-1).returns(s)))
-			s.addError(new MiniTError("No return from function with type.", beginLine()));
+		if(getNumStmt() == 0 || !getStmt(getNumStmt()-1).returns(s)) {
+			if(type() != SemType.NONE)
+				s.addError(new MiniTError("No return from function with type.", beginLine()));
+			else {}
+				addStmt(new Ret(this));
+		}
 	}
 	
 	public  boolean Stmt.returns(Semantic s) {

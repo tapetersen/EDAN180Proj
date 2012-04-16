@@ -60,6 +60,8 @@ aspect NameAnalysis {
 		return proc;
 	}
 	
+	public Ret.Ret(Procedure proc) { this(); this.proc = proc; }
+	
 	private Procedure Procedure.parentProc = null;
 	public String Procedure.label() {
 		if(parentProc != null)
@@ -106,8 +108,8 @@ aspect NameAnalysis {
 	public int Procedure.blockLevel() { return blockLevel; }
 	public void Procedure.nameAnalysis(Semantic s) {
 		parentProc = s.currentProcedure();
-		s.enterProcedure(this);
 		blockLevel = s.blockLevel();
+		s.enterProcedure(this);
 		
 		// gather the local procedures before analysis
 		for (int k=0; k<getNumStmt(); k++) {
