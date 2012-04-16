@@ -89,6 +89,8 @@ aspect icodeLoadStore {
   	}
   	
   	public void Result.loadIn(String dest, AsmContext context, StringBuilder body) {
+  		if(dest.equals("%eax"))
+  			return;
   		TabbedBuffer buf = context.newLineBuf();
   		buf.tabTo(1);
   		buf.append("movl ");

@@ -16,7 +16,7 @@ public class AsmContext {
 
 	public TabbedBuffer newLineBuf() {return new TabbedBuffer(tabs);};
 	public int getTempOffset(int number) {
-		return -varSize*(implicitVars+getNumVars());
+		return -varSize*(implicitVars+getNumVars()+number);
 	}
 
 	public int getVarOffset(int number) {

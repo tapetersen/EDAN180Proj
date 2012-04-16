@@ -42,24 +42,118 @@ aspect icodeToAsm {
     	context.setNumVars(getVars());
     	context.setNumTemps(getTemps());
     	TabbedBuffer buf = context.newLineBuf();
+    	
+    	// save dynlink
+    	buf.tabTo(1);
+    	buf.append("movl ");
+    	buf.tabTo(2);
+    	buf.append("%esp, "+context.getDynLinkOffset()+"(%esp)");
+    	body.append(""+buf+"\n");
+    	buf.clear();
+    	
+    	// set framepointer
+    	buf.tabTo(1);
+    	buf.append("movl ");
+    	buf.tabTo(2);
+    	buf.append("%esp, %ebp");
+    	body.append(""+buf+"\n");
+    	buf.clear();
+    	
+    	// save statlink
+    	buf.tabTo(1);
+    	buf.append("movl ");
+    	buf.tabTo(2);
+    	buf.append("%ecx, "+context.getStatLinkOffset()+"(%ebp)");
+    	body.append(""+buf+"\n");
+    	buf.clear();
+    	
+    	// allocate space
     	buf.tabTo(1);
     	buf.append("subl ");
     	buf.tabTo(2);
-    	buf.append("%esp, $"+context.getRecordSize());
+    	buf.append("$"+context.getRecordSize()+", %esp");
     	body.append(""+buf+"\n");
     }
     
     public void Return.toAsm(AsmContext context, StringBuilder body) {
     	TabbedBuffer buf = context.newLineBuf();
+    	
+    	// deallocate space
     	buf.tabTo(1);
-    	buf.append("addl ");
+    	buf.append("movl ");
     	buf.tabTo(2);
-    	buf.append("%esp, $"+context.getRecordSize());
+    	buf.append("(%ebp), %ebp");
     	body.append(""+buf+"\n");
+    	buf.clear();
     }
     
     public void Move.toAsm(AsmContext context, StringBuilder body) {
     	getOperand().loadIn("%eax", context, body);
     	getAddress().store(context, body);
   	}
+  	
+  	public void Call.toAsm(AsmContext context, StringBuilder body) {
+  		TabbedBuffer buf = context.newLineBuf();
+  		
+  		// load statlink in %ecx
+  		if(getLevels() > 0) {
+  			// Same level as this function, use our statlink. May have been clobbered so load again
+  			buf.tabTo(1);
+  			buf.append("movl ");
+  			buf.tabTo(2);
+  			buf.append(""+context.getStatLinkOffset()+"(%ebx), %ecx");
+  		} else {
+  		  	buf.tabTo(1);
+  			buf.append("movl ");
+  			buf.tabTo(2);
+  			buf.append("%ebx, %ecx");
+  		}
+  		body.append(""+buf+"\n");
+  		buf.clear();
+  		
+  		buf.tabTo(1);
+  		buf.append("call ");
+  		buf.tabTo(2);
+  		buf.append(getLabel());
+  		body.append(""+buf+"\n");
+  	}
+  	
+  	public void Instruction.storeResult(AsmContext context, StringBuilder body) {
+  		throw new UnsupportedOperationException();
+  	}
+  	
+  	public void BinOpr.storeResult(AsmContext context, StringBuilder body) {
+  		// assumes it's in %eax, correct except for mod.
+  		getAddress().store(context, body);
+  	}
+  	
+  	public void UnOpr.storeResult(AsmContext context, StringBuilder body) {
+  		// assumes it's in %eax, correct except for mod.
+  		getAddress().store(context, body);
+  	}
+  	
+  	public void UnOpr.loadOperands(AsmContext context, StringBuilder body) {
+  		getOperand().loadIn("%eax", context, body);
+  	}
+  	
+  	public void BinOpr.loadOperands(AsmContext context, StringBuilder body) {
+  		getOperand1().loadIn("%eax", context, body);
+  		getOperand2().loadIn("%edx", context, body);
+  	}
+  	
+  	public void BinOpr.toAsm(AsmContext context, StringBuilder body) {
+  		loadOperands(context, body);
+  		TabbedBuffer buf = context.newLineBuf();
+  		buf.tabTo(1);
+  		buf.append(getAsmString()+" ");
+  		buf.tabTo(2);
+  		buf.append("%eax, %edx, %eax");
+  		body.append(""+buf+"\n");
+  		storeResult(context, body);
+  	}
+  	
+  	public String BinOpr.getAsmString() { throw new UnsupportedOperationException(); }
+  	public String IntAdd.getAsmString() { return "addl"; }
+  	public String IntSub.getAsmString() { return "subl"; }
+  		
 }
