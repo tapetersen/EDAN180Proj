@@ -151,8 +151,14 @@ aspect CodeGenerator {
 		}
 		if(proc().id().equals("main")) {
 			code.addInstruction(new Alloc(1));
+			Operand op;
+			if(hasExpr())
+				op = new Result();
+			else
+				op = new IntConst(0);
+				
 			code.addInstruction(new Move(
-				new Result(),
+				op,
 				new Argument(0)
 			));
 			code.addInstruction(new Call("exit", 0));

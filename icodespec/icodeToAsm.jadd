@@ -198,7 +198,7 @@ aspect icodeToAsm {
   		buf.tabTo(1);
   		buf.append("andl ");
   		buf.tabTo(2);
-  		buf.append("$0xffffff00, %eax");
+  		buf.append("$0x000000ff, %eax");
   		body.append(""+buf+"\n");
   		
   		storeResult(context, body);
