@@ -1,4 +1,4 @@
-procedure printTwoNested() 
+procedure main() 
 begin
 	integer x;
 	procedure pone()
@@ -8,6 +8,7 @@ begin
 	procedure ptwo()
 	begin
 		writeint x;
+		writeln;
 	end;
 	x = 1;
 	pone();

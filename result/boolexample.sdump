@@ -1,0 +1,24 @@
+Start
+  Procedure: main : none : (Line:1 Col:1)
+    Opt
+    Id
+    List
+      Param: n : integer : (Line:1 Col:16)
+        Type
+        Id
+        Opt
+    List
+      ExprStmt
+        Or
+          Or
+            And
+              BoolConstant: true
+              BoolConstant: false
+            Not
+              BoolConstant: true
+          Eq
+            NumeralConstant: 3
+            IdUse n (Line:3 Col:44) -> Param: : n : integer : (Line:1 Col:16)
+              Id
+      Ret
+        Opt

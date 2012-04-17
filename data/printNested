@@ -1,9 +1,10 @@
-procedure printNested() 
+procedure main() 
 begin
 	integer x;
 	procedure innerProc()
 	begin
 		writeint x;
+		writeln;
 	end;
 	x = 1;
 	innerProc();

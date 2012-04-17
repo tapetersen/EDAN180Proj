@@ -1,0 +1,20 @@
+procedure main()
+begin
+	integer n;
+	integer result;
+	procedure integer factorial(integer n)
+	begin
+		if n == 0 then
+			return 1;
+		else
+			return n * factorial(n-1);
+		fi;
+	end;
+	n = readint;
+	for n until n<0 do 
+		result = factorial(n);
+		writeint result;
+		writeln;
+		n = readint;
+	od;
+end;

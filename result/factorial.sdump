@@ -1,0 +1,77 @@
+Start
+  Procedure: main : none : (Line:1 Col:1)
+    Opt
+    Id
+    List
+    List
+      IdDecl: n : integer : (Line:3 Col:9)
+        Type
+        Id
+        Opt
+      IdDecl: result : integer : (Line:4 Col:9)
+        Type
+        Id
+        Opt
+      Procedure: factorial : integer : (Line:5 Col:9)
+        Opt
+          Type
+        Id
+        List
+          Param: n : integer : (Line:5 Col:37)
+            Type
+            Id
+            Opt
+        List
+          IfStmt
+            Eq
+              IdUse n (Line:7 Col:20) -> Param: : n : integer : (Line:5 Col:37)
+                Id
+              NumeralConstant: 0
+            List
+              Ret
+                Opt
+                  NumeralConstant: 1
+            List
+              Ret
+                Opt
+                  Mul
+                    IdUse n (Line:10 Col:32) -> Param: : n : integer : (Line:5 Col:37)
+                      Id
+                    FuncCall factorial (Line:10 Col:36) -> Procedure: : factorial : integer : (Line:5 Col:9)
+                      Id
+                      List
+                        Sub
+                          IdUse n (Line:10 Col:46) -> Param: : n : integer : (Line:5 Col:37)
+                            Id
+                          NumeralConstant: 1
+      Assgn
+        IdUse n (Line:13 Col:9) -> IdDecl: : n : integer : (Line:3 Col:9)
+          Id
+        Read
+      ForStmt
+        ExprStmt
+          IdUse n (Line:14 Col:13) -> IdDecl: : n : integer : (Line:3 Col:9)
+            Id
+        Lt
+          IdUse n (Line:14 Col:21) -> IdDecl: : n : integer : (Line:3 Col:9)
+            Id
+          NumeralConstant: 0
+        List
+          Assgn
+            IdUse result (Line:15 Col:17) -> IdDecl: : result : integer : (Line:4 Col:9)
+              Id
+            FuncCall factorial (Line:15 Col:26) -> Procedure: : factorial : integer : (Line:5 Col:9)
+              Id
+              List
+                IdUse n (Line:15 Col:36) -> IdDecl: : n : integer : (Line:3 Col:9)
+                  Id
+          WriteInt
+            IdUse result (Line:16 Col:26) -> IdDecl: : result : integer : (Line:4 Col:9)
+              Id
+          WriteLn
+          Assgn
+            IdUse n (Line:18 Col:17) -> IdDecl: : n : integer : (Line:3 Col:9)
+              Id
+            Read
+      Ret
+        Opt

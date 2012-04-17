@@ -1,0 +1,44 @@
+Start
+  Procedure: main : none : (Line:1 Col:1)
+    Opt
+    Id
+    List
+    List
+      Procedure: printR : none : (Line:3 Col:9)
+        Opt
+        Id
+        List
+          Param: n : integer : (Line:3 Col:26)
+            Type
+            Id
+            Opt
+        List
+          IfStmt
+            Eq
+              IdUse n (Line:5 Col:20) -> Param: : n : integer : (Line:3 Col:26)
+                Id
+              NumeralConstant: 0
+            List
+              Ret
+                Opt
+            List
+          WriteInt
+            IdUse n (Line:8 Col:26) -> Param: : n : integer : (Line:3 Col:26)
+              Id
+          ExprStmt
+            FuncCall printR (Line:9 Col:17) -> Procedure: : printR : none : (Line:3 Col:9)
+              Id
+              List
+                Sub
+                  IdUse n (Line:9 Col:24) -> Param: : n : integer : (Line:3 Col:26)
+                    Id
+                  NumeralConstant: 1
+          Ret
+            Opt
+      ExprStmt
+        FuncCall printR (Line:11 Col:9) -> Procedure: : printR : none : (Line:3 Col:9)
+          Id
+          List
+            NumeralConstant: 5
+      Ret
+        Opt

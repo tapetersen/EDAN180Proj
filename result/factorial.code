@@ -1,0 +1,45 @@
+main:                                                           
+        ENTER   vars(2)         temps(2)                        
+        CALL    read            levels(0)                       
+        MOV     returned        var(0,0)                        
+loop_0:                                                         
+        INTLT   var(0,0)        0               #0              
+        JMPT    #0              endLoop_0                       
+        ALLOC   size(1)                                         
+        MOV     var(0,0)        arg(0)                          
+        CALL    main.factorial  levels(0)                       
+        DEALLOC size(1)                                         
+        MOV     result          #1                              
+        MOV     #1              var(0,1)                        
+        ALLOC   size(1)                                         
+        MOV     var(0,1)        arg(0)                          
+        CALL    writeint        levels(0)                       
+        DEALLOC size(1)                                         
+        CALL    writeln         levels(0)                       
+        CALL    read            levels(0)                       
+        MOV     returned        var(0,0)                        
+        JMP     loop_0                                          
+endLoop_0:                                                      
+        RETURN                                                  
+main.factorial:                                                 
+        ENTER   vars(0)         temps(4)                        
+        INTEQ   par(0,0)        0               #0              
+        JMPT    #0              if_0                            
+        JMP     else_0                                          
+if_0:                                                           
+        MOV     1               result                          
+        RETURN                                                  
+        JMP     fi_0                                            
+else_0:                                                         
+        ALLOC   size(1)                                         
+        INTSUB  par(0,0)        1               #2              
+        MOV     #2              arg(0)                          
+        CALL    main.factorial  levels(1)                       
+        DEALLOC size(1)                                         
+        MOV     result          #3                              
+        INTMUL  par(0,0)        #3              #1              
+        MOV     #1              result                          
+        RETURN                                                  
+        JMP     fi_0                                            
+fi_0:                                                           
+

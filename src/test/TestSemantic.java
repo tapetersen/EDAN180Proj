@@ -48,8 +48,38 @@ public class TestSemantic extends TestCaseOutput {
     }
     
     @Test
-    public void type_errors() {
-    	assertCorrectOutput("type_errors");
+    public void printRec() {
+    	assertCorrectOutput("printRec");
+    }
+    
+    @Test
+    public void printNested() {
+    	assertCorrectOutput("printNested");
+    }
+    
+    @Test
+    public void printTwoNested() {
+    	assertCorrectOutput("printTwoNested");
+    }
+    
+    @Test
+    public void factorial() {
+    	assertCorrectOutput("factorial");
+    }
+    
+    @Test
+    public void boolexample() {
+    	assertCorrectOutput("boolexample");
+    }
+    
+    @Test
+    public void codeexample() {
+    	assertCorrectOutput("codeexample");
+    }
+    
+    @Test
+    public void double_func_call() {
+    	assertCorrectOutput("double_func_call");
     }
 
     private static int analyse(String arg) {

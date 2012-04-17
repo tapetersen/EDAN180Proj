@@ -1,0 +1,209 @@
+Start
+  Procedure: main : none : (Line:1 Col:1)
+    Opt
+    Id
+    List
+    List
+      IdDecl: x : integer : (Line:3 Col:9)
+        Type
+        Id
+        Opt
+          NumeralConstant: 1
+      IdDecl: y : integer : (Line:4 Col:9)
+        Type
+        Id
+        Opt
+          NumeralConstant: 2
+      IdDecl: z : integer : (Line:5 Col:9)
+        Type
+        Id
+        Opt
+          NumeralConstant: 3
+      IdDecl: q : bool : (Line:6 Col:9)
+        Type
+        Id
+        Opt
+          BoolConstant: true
+      IdDecl: t : bool : (Line:7 Col:9)
+        Type
+        Id
+        Opt
+          BoolConstant: true
+      IdDecl: f : bool : (Line:8 Col:9)
+        Type
+        Id
+        Opt
+          BoolConstant: false
+      Assgn
+        IdUse x (Line:9 Col:9) -> IdDecl: : x : integer : (Line:3 Col:9)
+          Id
+        Add
+          IdUse y (Line:9 Col:13) -> IdDecl: : y : integer : (Line:4 Col:9)
+            Id
+          IdUse z (Line:9 Col:17) -> IdDecl: : z : integer : (Line:5 Col:9)
+            Id
+      Assgn
+        IdUse y (Line:10 Col:9) -> IdDecl: : y : integer : (Line:4 Col:9)
+          Id
+        Sub
+          IdUse x (Line:10 Col:13) -> IdDecl: : x : integer : (Line:3 Col:9)
+            Id
+          IdUse z (Line:10 Col:17) -> IdDecl: : z : integer : (Line:5 Col:9)
+            Id
+      Assgn
+        IdUse z (Line:11 Col:9) -> IdDecl: : z : integer : (Line:5 Col:9)
+          Id
+        Mul
+          IdUse x (Line:11 Col:13) -> IdDecl: : x : integer : (Line:3 Col:9)
+            Id
+          IdUse y (Line:11 Col:17) -> IdDecl: : y : integer : (Line:4 Col:9)
+            Id
+      Assgn
+        IdUse y (Line:12 Col:9) -> IdDecl: : y : integer : (Line:4 Col:9)
+          Id
+        Div
+          IdUse x (Line:12 Col:13) -> IdDecl: : x : integer : (Line:3 Col:9)
+            Id
+          IdUse z (Line:12 Col:17) -> IdDecl: : z : integer : (Line:5 Col:9)
+            Id
+      Assgn
+        IdUse q (Line:13 Col:9) -> IdDecl: : q : bool : (Line:6 Col:9)
+          Id
+        Lt
+          IdUse x (Line:13 Col:13) -> IdDecl: : x : integer : (Line:3 Col:9)
+            Id
+          IdUse y (Line:13 Col:17) -> IdDecl: : y : integer : (Line:4 Col:9)
+            Id
+      Assgn
+        IdUse q (Line:14 Col:9) -> IdDecl: : q : bool : (Line:6 Col:9)
+          Id
+        Gt
+          IdUse x (Line:14 Col:13) -> IdDecl: : x : integer : (Line:3 Col:9)
+            Id
+          IdUse y (Line:14 Col:17) -> IdDecl: : y : integer : (Line:4 Col:9)
+            Id
+      Assgn
+        IdUse q (Line:15 Col:9) -> IdDecl: : q : bool : (Line:6 Col:9)
+          Id
+        Lte
+          IdUse x (Line:15 Col:13) -> IdDecl: : x : integer : (Line:3 Col:9)
+            Id
+          IdUse y (Line:15 Col:18) -> IdDecl: : y : integer : (Line:4 Col:9)
+            Id
+      Assgn
+        IdUse q (Line:16 Col:9) -> IdDecl: : q : bool : (Line:6 Col:9)
+          Id
+        Gte
+          IdUse x (Line:16 Col:13) -> IdDecl: : x : integer : (Line:3 Col:9)
+            Id
+          IdUse y (Line:16 Col:18) -> IdDecl: : y : integer : (Line:4 Col:9)
+            Id
+      Assgn
+        IdUse q (Line:17 Col:9) -> IdDecl: : q : bool : (Line:6 Col:9)
+          Id
+        Eq
+          IdUse x (Line:17 Col:13) -> IdDecl: : x : integer : (Line:3 Col:9)
+            Id
+          IdUse y (Line:17 Col:18) -> IdDecl: : y : integer : (Line:4 Col:9)
+            Id
+      Assgn
+        IdUse q (Line:18 Col:9) -> IdDecl: : q : bool : (Line:6 Col:9)
+          Id
+        Neq
+          IdUse x (Line:18 Col:13) -> IdDecl: : x : integer : (Line:3 Col:9)
+            Id
+          IdUse y (Line:18 Col:18) -> IdDecl: : y : integer : (Line:4 Col:9)
+            Id
+      Assgn
+        IdUse q (Line:19 Col:9) -> IdDecl: : q : bool : (Line:6 Col:9)
+          Id
+        Or
+          Lt
+            IdUse x (Line:19 Col:14) -> IdDecl: : x : integer : (Line:3 Col:9)
+              Id
+            IdUse z (Line:19 Col:18) -> IdDecl: : z : integer : (Line:5 Col:9)
+              Id
+          Eq
+            IdUse x (Line:19 Col:23) -> IdDecl: : x : integer : (Line:3 Col:9)
+              Id
+            IdUse y (Line:19 Col:28) -> IdDecl: : y : integer : (Line:4 Col:9)
+              Id
+      Assgn
+        IdUse q (Line:20 Col:9) -> IdDecl: : q : bool : (Line:6 Col:9)
+          Id
+        Or
+          IdUse f (Line:20 Col:13) -> IdDecl: : f : bool : (Line:8 Col:9)
+            Id
+          IdUse t (Line:20 Col:18) -> IdDecl: : t : bool : (Line:7 Col:9)
+            Id
+      Assgn
+        IdUse q (Line:21 Col:9) -> IdDecl: : q : bool : (Line:6 Col:9)
+          Id
+        And
+          IdUse q (Line:21 Col:13) -> IdDecl: : q : bool : (Line:6 Col:9)
+            Id
+          IdUse q (Line:21 Col:19) -> IdDecl: : q : bool : (Line:6 Col:9)
+            Id
+      Assgn
+        IdUse q (Line:22 Col:9) -> IdDecl: : q : bool : (Line:6 Col:9)
+          Id
+        Not
+          IdUse q (Line:22 Col:17) -> IdDecl: : q : bool : (Line:6 Col:9)
+            Id
+      IfStmt
+        BoolConstant: true
+        List
+          Assgn
+            IdUse z (Line:24 Col:17) -> IdDecl: : z : integer : (Line:5 Col:9)
+              Id
+            Add
+              IdUse x (Line:24 Col:21) -> IdDecl: : x : integer : (Line:3 Col:9)
+                Id
+              NumeralConstant: 1
+        List
+      IfStmt
+        BoolConstant: false
+        List
+          Assgn
+            IdUse x (Line:27 Col:17) -> IdDecl: : x : integer : (Line:3 Col:9)
+              Id
+            Add
+              IdUse y (Line:27 Col:21) -> IdDecl: : y : integer : (Line:4 Col:9)
+                Id
+              NumeralConstant: 2
+        List
+          Assgn
+            IdUse x (Line:29 Col:17) -> IdDecl: : x : integer : (Line:3 Col:9)
+              Id
+            Sub
+              IdUse y (Line:29 Col:21) -> IdDecl: : y : integer : (Line:4 Col:9)
+                Id
+              NumeralConstant: 2
+      ForStmt
+        IdDecl: i : integer : (Line:32 Col:13)
+          Type
+          Id
+          Opt
+            NumeralConstant: 1
+        Eq
+          IdUse i (Line:32 Col:33) -> IdDecl: : i : integer : (Line:32 Col:13)
+            Id
+          NumeralConstant: 3
+        List
+          Assgn
+            IdUse i (Line:33 Col:17) -> IdDecl: : i : integer : (Line:32 Col:13)
+              Id
+            Add
+              IdUse i (Line:33 Col:21) -> IdDecl: : i : integer : (Line:32 Col:13)
+                Id
+              NumeralConstant: 1
+      Assgn
+        IdUse x (Line:36 Col:9) -> IdDecl: : x : integer : (Line:3 Col:9)
+          Id
+        Read
+      WriteInt
+        IdUse x (Line:37 Col:18) -> IdDecl: : x : integer : (Line:3 Col:9)
+          Id
+      WriteLn
+      Ret
+        Opt

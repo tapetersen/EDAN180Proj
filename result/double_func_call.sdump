@@ -1,0 +1,25 @@
+Start
+  Procedure: main : none : (Line:1 Col:1)
+    Opt
+    Id
+    List
+    List
+      Procedure: one : integer : (Line:3 Col:9)
+        Opt
+          Type
+        Id
+        List
+        List
+          Ret
+            Opt
+              NumeralConstant: 1
+      ExprStmt
+        Add
+          FuncCall one (Line:4 Col:9) -> Procedure: : one : integer : (Line:3 Col:9)
+            Id
+            List
+          FuncCall one (Line:4 Col:17) -> Procedure: : one : integer : (Line:3 Col:9)
+            Id
+            List
+      Ret
+        Opt

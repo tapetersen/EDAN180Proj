@@ -1,0 +1,42 @@
+Start
+  Procedure: main : none : (Line:1 Col:1)
+    Opt
+    Id
+    List
+    List
+      IdDecl: x : integer : (Line:3 Col:9)
+        Type
+        Id
+        Opt
+      Procedure: pone : none : (Line:4 Col:9)
+        Opt
+        Id
+        List
+        List
+          ExprStmt
+            FuncCall ptwo (Line:6 Col:17) -> Procedure: : ptwo : none : (Line:8 Col:9)
+              Id
+              List
+          Ret
+            Opt
+      Procedure: ptwo : none : (Line:8 Col:9)
+        Opt
+        Id
+        List
+        List
+          WriteInt
+            IdUse x (Line:10 Col:26) -> IdDecl: : x : integer : (Line:3 Col:9)
+              Id
+          WriteLn
+          Ret
+            Opt
+      Assgn
+        IdUse x (Line:13 Col:9) -> IdDecl: : x : integer : (Line:3 Col:9)
+          Id
+        NumeralConstant: 1
+      ExprStmt
+        FuncCall pone (Line:14 Col:9) -> Procedure: : pone : none : (Line:4 Col:9)
+          Id
+          List
+      Ret
+        Opt

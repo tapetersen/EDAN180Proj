@@ -1,0 +1,31 @@
+Start
+  Procedure: main : none : (Line:1 Col:1)
+    Opt
+    Id
+    List
+    List
+      IdDecl: x : integer : (Line:3 Col:9)
+        Type
+        Id
+        Opt
+      Procedure: innerProc : none : (Line:4 Col:9)
+        Opt
+        Id
+        List
+        List
+          WriteInt
+            IdUse x (Line:6 Col:26) -> IdDecl: : x : integer : (Line:3 Col:9)
+              Id
+          WriteLn
+          Ret
+            Opt
+      Assgn
+        IdUse x (Line:9 Col:9) -> IdDecl: : x : integer : (Line:3 Col:9)
+          Id
+        NumeralConstant: 1
+      ExprStmt
+        FuncCall innerProc (Line:10 Col:9) -> Procedure: : innerProc : none : (Line:4 Col:9)
+          Id
+          List
+      Ret
+        Opt
