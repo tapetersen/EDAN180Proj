@@ -1,12 +1,12 @@
-printByRecursion:                                               
+main:                                                           
         ENTER   vars(0)         temps(1)                        
         ALLOC   size(1)                                         
         MOV     5               arg(0)                          
-        CALL    printByRecursion.printRlevels(0)                
+        CALL    main.printR     levels(0)                       
         DEALLOC size(1)                                         
         MOV     result          #0                              
         RETURN                                                  
-printByRecursion.printR:                                        
+main.printR:                                                    
         ENTER   vars(0)         temps(3)                        
         INTEQ   par(0,0)        0               #0              
         JMPT    #0              if_0                            
@@ -22,7 +22,7 @@ fi_0:
         ALLOC   size(1)                                         
         INTSUB  par(0,0)        1               #1              
         MOV     #1              arg(0)                          
-        CALL    printByRecursion.printRlevels(1)                
+        CALL    main.printR     levels(1)                       
         DEALLOC size(1)                                         
         MOV     result          #2                              
         RETURN                                                  

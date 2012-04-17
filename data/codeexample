@@ -1,8 +1,8 @@
 procedure main()
 begin
-	integer x = 0;
-	integer y = x;
-	integer z = y;
+	integer x = 1;
+	integer y = 2;
+	integer z = 3;
 	bool q = true;
 	bool t = true;
 	bool f = false;
@@ -20,16 +20,21 @@ begin
 	q = f or t;
 	q = q and q;
 	q = not q;
-	if x < y then
+	if true then
 		z = x + 1;
 	fi;
-	if x > y then
+	if false then
 		x = y + 2;
 	else
 		x = y - 2;
 	fi;
+	
+	for integer i = 1 until i == 3 do
+		i = i + 1;
+	od;
 
 	x = readint;
 	writeint x;
 	writeln;
+	
 end;

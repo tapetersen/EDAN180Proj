@@ -55,9 +55,9 @@ aspect icodeToAsm {
     	
     	// save dynlink
     	buf.tabTo(1);
-    	buf.append("movl ");
+    	buf.append("pushl ");
     	buf.tabTo(2);
-    	buf.append("%ebp, "+context.getDynLinkOffset()+"(%esp)");
+    	buf.append("%ebp");
     	buf.tabTo(3);
     	buf.append("# save dynlink");
     	body.append(""+buf+"\n");
@@ -73,6 +73,16 @@ aspect icodeToAsm {
     	body.append(""+buf+"\n");
     	buf.clear();
     	
+    	// allocate space
+    	buf.tabTo(1);
+    	buf.append("subl ");
+    	buf.tabTo(2);
+    	buf.append("$"+context.getRecordSize()+", %esp");
+    	buf.tabTo(3);
+    	buf.append("# allocate stackspace");
+    	body.append(""+buf+"\n");
+    	buf.clear();
+    	
     	// save statlink
     	buf.tabTo(1);
     	buf.append("movl ");
@@ -83,35 +93,13 @@ aspect icodeToAsm {
     	body.append(""+buf+"\n");
     	buf.clear();
     	
-    	// allocate space
-    	buf.tabTo(1);
-    	buf.append("subl ");
-    	buf.tabTo(2);
-    	buf.append("$"+context.getRecordSize()+", %esp");
-    	buf.tabTo(3);
-    	buf.append("# allocate stackspace");
-    	body.append(""+buf+"\n");
     }
     
     public void Return.toAsm(AsmContext context, StringBuilder body) {
     	TabbedBuffer buf = context.newLineBuf();
     	
-    	// deallocate space
     	buf.tabTo(1);
-    	buf.append("leal ");
-    	buf.tabTo(2);
-    	buf.append("(%ebp), %esp");
-    	buf.tabTo(3);
-    	buf.append("# restore stackpointer (dealloc)");
-    	body.append(""+buf+"\n");
-    	buf.clear();
-    	
-    	buf.tabTo(1);
-    	buf.append("movl ");
-    	buf.tabTo(2);
-    	buf.append(""+context.getDynLinkOffset()+"(%ebp), %ebp");
-    	buf.tabTo(3);
-    	buf.append("# restore framepointer");
+    	buf.append("leave ");
     	body.append(""+buf+"\n");
     	buf.clear();
     	
@@ -201,6 +189,27 @@ aspect icodeToAsm {
   		buf.append("$0x000000ff, %eax");
   		body.append(""+buf+"\n");
   		
+  		storeResult(context, body);
+  	}
+  	
+  	public void IntDiv.toAsm(AsmContext context, StringBuilder body) {
+  	  	getOperand1().loadIn("%eax", context, body);
+  		getOperand2().loadIn("%ecx", context, body);
+  		
+  		// zero out %edx
+  		TabbedBuffer buf = context.newLineBuf();
+  		buf.tabTo(1);
+  		buf.append("movl ");
+  		buf.tabTo(2);
+  		buf.append("$0, %edx");
+  		body.append(""+buf+"\n");
+  		buf.clear();
+  		
+  		buf.tabTo(1);
+  		buf.append(getAsmString()+" ");
+  		buf.tabTo(2);
+  		buf.append("%ecx");
+  		body.append(""+buf+"\n");
   		storeResult(context, body);
   	}
   	

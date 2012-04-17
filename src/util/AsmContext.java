@@ -9,7 +9,7 @@ public class AsmContext {
 
 	
 	private final static int varSize = 4;
-	private final static int implicitVars = 2; // retaddress doesn't count
+	private final static int implicitVars = 2; // only statlink
 	private final static int retOffset = varSize*1;
 	private final static int dynLinkOffset = varSize*0;
 	private final static int statLinkOffset = varSize*-1;
@@ -52,7 +52,7 @@ public class AsmContext {
 	}
 	
 	public int getParOffset(int number) {
-		return -varSize*(-2-number);
+		return -varSize*(-3-number);
 	}
 	
 	public int getArgOffset(int number) {

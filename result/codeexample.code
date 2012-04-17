@@ -1,8 +1,8 @@
 main:                                                           
-        ENTER   vars(6)         temps(21)                       
-        MOV     0               var(0,0)                        
-        MOV     var(0,0)        var(0,1)                        
-        MOV     var(0,1)        var(0,2)                        
+        ENTER   vars(7)         temps(21)                       
+        MOV     1               var(0,0)                        
+        MOV     2               var(0,1)                        
+        MOV     3               var(0,2)                        
         MOV     1               var(0,3)                        
         MOV     1               var(0,4)                        
         MOV     0               var(0,5)                        
@@ -36,26 +36,32 @@ main:
         MOV     #14             var(0,3)                        
         NOT     var(0,3)        #15                             
         MOV     #15             var(0,3)                        
-        INTLT   var(0,0)        var(0,1)        #16             
-        JMPT    #16             if_0                            
+        JMPT    1               if_0                            
         JMP     fi_0                                            
 if_0:                                                           
-        INTADD  var(0,0)        1               #17             
-        MOV     #17             var(0,2)                        
+        INTADD  var(0,0)        1               #16             
+        MOV     #16             var(0,2)                        
         JMP     fi_0                                            
 fi_0:                                                           
-        INTGT   var(0,0)        var(0,1)        #18             
-        JMPT    #18             if_1                            
+        JMPT    0               if_1                            
         JMP     else_1                                          
 if_1:                                                           
-        INTADD  var(0,1)        2               #19             
-        MOV     #19             var(0,0)                        
+        INTADD  var(0,1)        2               #17             
+        MOV     #17             var(0,0)                        
         JMP     fi_1                                            
 else_1:                                                         
-        INTSUB  var(0,1)        2               #20             
-        MOV     #20             var(0,0)                        
+        INTSUB  var(0,1)        2               #18             
+        MOV     #18             var(0,0)                        
         JMP     fi_1                                            
 fi_1:                                                           
+        MOV     1               var(0,6)                        
+loop_0:                                                         
+        INTEQ   var(0,6)        3               #19             
+        JMPT    #19             endLoop_0                       
+        INTADD  var(0,6)        1               #20             
+        MOV     #20             var(0,6)                        
+        JMP     loop_0                                          
+endLoop_0:                                                      
         CALL    read            levels(0)                       
         MOV     returned        var(0,0)                        
         ALLOC   size(1)                                         

@@ -149,21 +149,7 @@ aspect CodeGenerator {
 				new Result()
 			));
 		}
-		if(proc().id().equals("main")) {
-			code.addInstruction(new Alloc(1));
-			Operand op;
-			if(hasExpr())
-				op = new Result();
-			else
-				op = new IntConst("0");
-				
-			code.addInstruction(new Move(
-				op,
-				new Argument(0)
-			));
-			code.addInstruction(new Call("exit", 0));
-		} else
-			code.addInstruction(new Return());
+		code.addInstruction(new Return());
 	}
 	
 	public void WriteInt.genCode(Code code, TempFactory tempFactory, Procedure proc) {

@@ -1,4 +1,4 @@
-procedure printByRecursion() 
+procedure main() 
 begin
 	procedure printR(integer n)
 	begin
