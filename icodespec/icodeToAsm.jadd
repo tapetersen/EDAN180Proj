@@ -112,6 +112,10 @@ aspect icodeToAsm {
     	buf.append("# restore framepointer");
     	body.append(""+buf+"\n");
     	buf.clear();
+    	
+    	buf.tabTo(1);
+    	buf.append("ret ");
+    	body.append(""+buf+"\n");
     }
     
     public void Move.toAsm(AsmContext context, StringBuilder body) {

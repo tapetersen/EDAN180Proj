@@ -52,7 +52,7 @@ public class AsmContext {
 	}
 	
 	public int getParOffset(int number) {
-		return -varSize*(implicitVars+numVars+numTemps+numArgs-number);
+		return -varSize*(-2-number);
 	}
 	
 	public int getArgOffset(int number) {
