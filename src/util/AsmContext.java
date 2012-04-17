@@ -7,16 +7,15 @@ public class AsmContext {
 	private int numTemps;
 	private int numArgs;
 
-	
 	private final static int varSize = 4;
-	private final static int implicitVars = 2; // only statlink
+	private final static int implicitVars = 1;
 	private final static int retOffset = varSize*1;
 	private final static int dynLinkOffset = varSize*0;
 	private final static int statLinkOffset = varSize*-1;
 
 	public TabbedBuffer newLineBuf() {return new TabbedBuffer(tabs);};
 	public int getTempOffset(int number) {
-		return -varSize*(implicitVars+getNumVars()+number);
+		return -varSize*(implicitVars+1+numVars+number);
 	}
 
 	public int getVarOffset(int number) {
@@ -52,11 +51,11 @@ public class AsmContext {
 	}
 	
 	public int getParOffset(int number) {
-		return -varSize*(-3-number);
+		return -varSize*(-2-number);
 	}
 	
 	public int getArgOffset(int number) {
-		return -varSize*(implicitVars+numVars+numTemps+number);
+		return -varSize*(implicitVars+1+numVars+numTemps+number);
 	}
 	
 	public int getStatLinkOffset() {

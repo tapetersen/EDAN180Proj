@@ -153,7 +153,7 @@
         <delete dir="bin" />
         <mkdir dir="bin" />
         <delete>
-            <fileset dir="." includes="*.res, *.html" />
+            <fileset dir="." includes="*.res" />
         </delete>
     </target>
 </project>
