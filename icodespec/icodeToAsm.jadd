@@ -42,7 +42,7 @@ aspect icodeToAsm {
     public void Dealloc.toAsm(AsmContext context, StringBuilder body) {
     	TabbedBuffer buf = context.newLineBuf();
     	buf.tabTo(1);
-        buf.append("addll ");
+        buf.append("addl ");
         buf.tabTo(2);
         buf.append("$"+getSize()*4+", %esp");
         body.append(""+buf+"\n");
@@ -215,19 +215,23 @@ aspect icodeToAsm {
   		storeResult(context, body);
   	}
   	
-  	public String BinOpr.getAsmString() { throw new UnsupportedOperationException(); }
+  	public String Instruction.getAsmString() { throw new UnsupportedOperationException(); }
   	public String IntAdd.getAsmString() { return "addl"; }
+  	public String IntSub.getAsmString() { return "subl"; }
   	public String IntMul.getAsmString() { return "imull"; }
   	public String IntDiv.getAsmString() { return "idivl"; }
   	public String IntNeg.getAsmString() { return "negl"; }
   	public String BoolAnd.getAsmString() { return "andl"; }
   	public String BoolOr.getAsmString() { return "orl"; }
+  	public String BoolNot.getAsmString() { return "notl"; }
   	public String IntEq.getAsmString() { return "sete"; }
   	public String IntNe.getAsmString() { return "setne"; }
   	public String IntLt.getAsmString() { return "setl"; }
   	public String IntLe.getAsmString() { return "setle"; }
   	public String IntGt.getAsmString() { return "setg"; }
   	public String IntGe.getAsmString() { return "setge"; }
+  	public String JmpT.getAsmString() { return "je"; }
+  	public String JmpF.getAsmString() { return "jne"; }
   	
 	public void BoolNot.toAsm(AsmContext context, StringBuilder body) {
   		loadOperands(context, body);
@@ -240,4 +244,28 @@ aspect icodeToAsm {
   		storeResult(context, body);
   	}
   	
+  	public void Jmp.toAsm(AsmContext context, StringBuilder body) {
+  		TabbedBuffer buf = context.newLineBuf();
+  		buf.tabTo(1);
+  		buf.append("jmp ");
+  		buf.tabTo(2);
+  		buf.append(getLabel());
+  		body.append(""+buf+"\n");
+  	}
+  	
+  	public void JmpCond.toAsm(AsmContext context, StringBuilder body) {
+  	  	getOperand().loadIn("%eax", context, body);
+ 		TabbedBuffer buf = context.newLineBuf();
+  		buf.tabTo(1);
+  		buf.append("cmpl ");
+  		buf.tabTo(2);
+  		buf.append("$1, %eax");
+  		body.append(""+buf+"\n");
+  		buf.clear();
+  		
+  		buf.tabTo(1);
+  		buf.append(getAsmString()+" ");
+  		buf.append(getLabel());
+  		body.append(""+buf+"\n");
+  	}
 }

@@ -155,7 +155,7 @@ aspect CodeGenerator {
 			if(hasExpr())
 				op = new Result();
 			else
-				op = new IntConst(0);
+				op = new IntConst("0");
 				
 			code.addInstruction(new Move(
 				op,
