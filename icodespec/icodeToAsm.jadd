@@ -55,7 +55,9 @@ aspect icodeToAsm {
     	buf.tabTo(1);
     	buf.append("movl ");
     	buf.tabTo(2);
-    	buf.append("%esp, "+context.getDynLinkOffset()+"(%esp)");
+    	buf.append("%ebp, "+context.getDynLinkOffset()+"(%esp)");
+    	buf.tabTo(3);
+    	buf.append("# save dynlink");
     	body.append(""+buf+"\n");
     	buf.clear();
     	
@@ -64,6 +66,8 @@ aspect icodeToAsm {
     	buf.append("movl ");
     	buf.tabTo(2);
     	buf.append("%esp, %ebp");
+    	buf.tabTo(3);
+    	buf.append("# set framepointer");
     	body.append(""+buf+"\n");
     	buf.clear();
     	
@@ -72,6 +76,8 @@ aspect icodeToAsm {
     	buf.append("movl ");
     	buf.tabTo(2);
     	buf.append("%ecx, "+context.getStatLinkOffset()+"(%ebp)");
+    	buf.tabTo(3);
+    	buf.append("# save statlink");
     	body.append(""+buf+"\n");
     	buf.clear();
     	
@@ -80,6 +86,8 @@ aspect icodeToAsm {
     	buf.append("subl ");
     	buf.tabTo(2);
     	buf.append("$"+context.getRecordSize()+", %esp");
+    	buf.tabTo(3);
+    	buf.append("# allocate stackspace");
     	body.append(""+buf+"\n");
     }
     
@@ -88,9 +96,20 @@ aspect icodeToAsm {
     	
     	// deallocate space
     	buf.tabTo(1);
+    	buf.append("leal ");
+    	buf.tabTo(2);
+    	buf.append("(%ebp), %esp");
+    	buf.tabTo(3);
+    	buf.append("# restore stackpointer (dealloc)");
+    	body.append(""+buf+"\n");
+    	buf.clear();
+    	
+    	buf.tabTo(1);
     	buf.append("movl ");
     	buf.tabTo(2);
-    	buf.append("(%ebp), %ebp");
+    	buf.append(""+context.getDynLinkOffset()+"(%ebp), %ebp");
+    	buf.tabTo(3);
+    	buf.append("# restore framepointer");
     	body.append(""+buf+"\n");
     	buf.clear();
     }
