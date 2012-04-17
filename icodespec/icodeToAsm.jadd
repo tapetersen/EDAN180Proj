@@ -35,7 +35,8 @@ aspect icodeToAsm {
     	buf.tabTo(1);
         buf.append("subl ");
         buf.tabTo(2);
-        buf.append("%esp, $" + getSize()*4);
+        buf.append("$"+getSize()*4+", %esp");
+        body.append(""+buf+"\n");
     }
     
     public void Dealloc.toAsm(AsmContext context, StringBuilder body) {
@@ -43,7 +44,8 @@ aspect icodeToAsm {
     	buf.tabTo(1);
         buf.append("addll ");
         buf.tabTo(2);
-        buf.append("%esp, $" + getSize()*4);
+        buf.append("$"+getSize()*4+", %esp");
+        body.append(""+buf+"\n");
     }
     
     public void Enter.toAsm(AsmContext context, StringBuilder body) {

@@ -56,7 +56,7 @@ public class AsmContext {
 	}
 	
 	public int getArgOffset(int number) {
-		return varSize*(number);
+		return -varSize*(implicitVars+numVars+numTemps+number);
 	}
 	
 	public int getStatLinkOffset() {

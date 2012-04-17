@@ -143,12 +143,21 @@ aspect CodeGenerator {
 	}
 	
 	public void Ret.genCode(Code code, TempFactory tempFactory, Procedure proc) {
-		if(hasExpr())
+		if(hasExpr()) {
 			code.addInstruction(new Move(
 				getExpr().genExpr(code, tempFactory, proc.blockLevel()+1),
 				new Result()
-		));
-		code.addInstruction(new Return());
+			));
+		}
+		if(proc().id().equals("main")) {
+			code.addInstruction(new Alloc(1));
+			code.addInstruction(new Move(
+				new Result(),
+				new Argument(0)
+			));
+			code.addInstruction(new Call("exit", 0));
+		} else
+			code.addInstruction(new Return());
 	}
 	
 	public void WriteInt.genCode(Code code, TempFactory tempFactory, Procedure proc) {
