@@ -20,7 +20,7 @@ aspect icodeLoadStore {
   		buf.tabTo(1);
   		buf.append("movl ");
   		buf.tabTo(2);
-  		buf.append(""+context.getArgOffset(getNumber())+"(%ebx), "+dest);
+  		buf.append(""+context.getArgOffset(getNumber())+"(%ebp), "+dest);
   		body.append(""+buf+"\n");
   	}
   	
@@ -32,7 +32,7 @@ aspect icodeLoadStore {
   			buf.tabTo(1);
   			buf.append("movl ");
   			buf.tabTo(2);
-  			buf.append("%ebx, %ecx");
+  			buf.append("%ebp, %ecx");
   			body.append(""+buf+"\n");
   			buf.clear();
   		}
@@ -42,7 +42,7 @@ aspect icodeLoadStore {
   			buf.tabTo(1);
   			buf.append("movl ");
   			buf.tabTo(2);
-  			buf.append(""+context.getStatLinkOffset()+"(%ebx), %ebx");
+  			buf.append(""+context.getStatLinkOffset()+"(%ebp), %ebp");
   			body.append(""+buf+"\n");
   		}
   	}
@@ -52,7 +52,7 @@ aspect icodeLoadStore {
   		buf.tabTo(1);
   		buf.append("movl ");
   		buf.tabTo(2);
-  		buf.append("%ecx, %ebx");
+  		buf.append("%ecx, %ebp");
   		body.append(""+buf+"\n");
   	}
   	
@@ -65,7 +65,7 @@ aspect icodeLoadStore {
   		buf.tabTo(1);
   		buf.append("movl ");
   		buf.tabTo(2);
-  		buf.append(""+context.getVarOffset(getNumber())+"(%ebx), "+dest);
+  		buf.append(""+context.getVarOffset(getNumber())+"(%ebp), "+dest);
   		body.append(""+buf+"\n");
   		
   		if(getLevels()>0)
@@ -81,7 +81,7 @@ aspect icodeLoadStore {
   		buf.tabTo(1);
   		buf.append("movl ");
   		buf.tabTo(2);
-  		buf.append(""+context.getParOffset(getNumber())+"(%ebx), "+dest);
+  		buf.append(""+context.getParOffset(getNumber())+"(%ebp), "+dest);
   		body.append(""+buf+"\n");
   		
   		if(getLevels()>0)
@@ -113,7 +113,7 @@ aspect icodeLoadStore {
     	buf.tabTo(1);
   		buf.append("movl ");
   		buf.tabTo(2);
-  		buf.append(""+context.getTempOffset(getNumber())+"(%ebx), "+dest);
+  		buf.append(""+context.getTempOffset(getNumber())+"(%ebp), "+dest);
   		body.append(""+buf+"\n");
   	}
   	
@@ -124,7 +124,7 @@ aspect icodeLoadStore {
   		buf.tabTo(1);
   		buf.append("movl ");
   		buf.tabTo(2);
-  		buf.append("%eax, "+context.getArgOffset(getNumber())+"(%ebx)");
+  		buf.append("%eax, "+context.getArgOffset(getNumber())+"(%ebp)");
   		body.append(""+buf+"\n");
   	}
   	
@@ -138,7 +138,7 @@ aspect icodeLoadStore {
   		buf.tabTo(1);
   		buf.append("movl ");
   		buf.tabTo(2);
-  		buf.append("%eax, "+context.getVarOffset(getNumber())+"(%ebx)");
+  		buf.append("%eax, "+context.getVarOffset(getNumber())+"(%ebp)");
   		body.append(""+buf+"\n");
   		
   		if(getLevels()>0)
@@ -154,7 +154,7 @@ aspect icodeLoadStore {
   		buf.tabTo(1);
   		buf.append("movl ");
   		buf.tabTo(2);
-  		buf.append("%eax, "+context.getParOffset(getNumber())+"(%ebx)");
+  		buf.append("%eax, "+context.getParOffset(getNumber())+"(%ebp)");
   		body.append(""+buf+"\n");
   		
   		if(getLevels()>0)
@@ -174,7 +174,7 @@ aspect icodeLoadStore {
     	buf.tabTo(1);
   		buf.append("movl ");
   		buf.tabTo(2);
-  		buf.append("%eax, "+context.getTempOffset(getNumber())+"(%ebx)");
+  		buf.append("%eax, "+context.getTempOffset(getNumber())+"(%ebp)");
   		body.append(""+buf+"\n");
   	}
     

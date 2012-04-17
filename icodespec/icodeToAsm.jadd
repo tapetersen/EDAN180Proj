@@ -128,12 +128,12 @@ aspect icodeToAsm {
   			buf.tabTo(1);
   			buf.append("movl ");
   			buf.tabTo(2);
-  			buf.append(""+context.getStatLinkOffset()+"(%ebx), %ecx");
+  			buf.append(""+context.getStatLinkOffset()+"(%ebp), %ecx");
   		} else {
   		  	buf.tabTo(1);
   			buf.append("movl ");
   			buf.tabTo(2);
-  			buf.append("%ebx, %ecx");
+  			buf.append("%ebp, %ecx");
   		}
   		body.append(""+buf+"\n");
   		buf.clear();
