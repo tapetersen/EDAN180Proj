@@ -122,6 +122,7 @@ aspect NameAnalysis {
 		
 	public void Ret.nameAnalysis(Semantic s) {
 		proc = s.currentProcedure();
+		super.nameAnalysis(s);
 	}
 	
 	public void FuncCall.nameAnalysis(Semantic s) {
