@@ -1,4 +1,10 @@
+    .text   
+    .global main
 main:
-    subl    %esp, $8        
-    addl    %esp, $8        
+    pushl   %ebp            # save dynlink
+    movl    %esp, %ebp      # set framepointer
+    subl    $4, %esp        # allocate stackspace
+    movl    %ecx, -4(%ebp)  # save statlink
+    leave   
+    ret     
 

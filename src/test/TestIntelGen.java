@@ -26,6 +26,30 @@ public class TestIntelGen extends TestCaseOutput {
 	public void minimal() {
 		assertCorrectOutput("minimal");
 	}
+	@Test
+	public void boolexample() {
+		assertCorrectOutput("boolexample");
+	}
+	@Test
+	public void codeexample() {
+		assertCorrectOutput("codeexample");
+	}
+	@Test
+	public void double_func_call() {
+		assertCorrectOutput("double_func_call");
+	}
+	@Test
+	public void example() {
+		assertCorrectOutput("example");
+	}
+	@Test
+	public void printRec() {
+		assertCorrectOutput("printRec");
+	}
+	@Test
+	public void for_ex() {
+		assertCorrectOutput("for_ex");
+	}
 
 
 	private static void genCode(String arg) {

@@ -1,5 +1,8 @@
 procedure main() 
 begin
-	procedure integer one() begin return 1; end;
+	procedure integer one() 
+	begin 
+		return 1; 
+	end;
 	one() + one();
 end;
